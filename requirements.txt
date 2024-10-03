@@ -2,4 +2,4 @@ streamlit
 joblib
 pandas
 numpy
-# Add other dependencies here
+scikit-learn
