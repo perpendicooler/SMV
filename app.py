@@ -200,7 +200,7 @@ if page == "SMV Prediction App":
         with open('SMV_original_data.xlsx', 'rb') as f:
             st.download_button('Download Original Data', f, file_name='SMV_original_data.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-elif page == "Overview: The SMV Prediction Project":
+elif page == "🚀Overview: The SMV Prediction Project":
     # Overview page content
     st.header("🚀 The Journey of Predicting SMV: From Data to Results")
     st.write("""
@@ -245,7 +245,7 @@ elif page == "Overview: The SMV Prediction Project":
     """)
 
 
-elif page == "Data Preparation: Getting Ready for Modeling":
+elif page == "📊Data Preparation: Getting Ready for Modeling":
     # Data preparation page content
     st.header("📊 Data Preparation for SMV Prediction")
     st.write("""
@@ -274,7 +274,7 @@ elif page == "Data Preparation: Getting Ready for Modeling":
     """)
 
 
-elif page == "Modeling: Random Forest & XGBoost":
+elif page == "💻Modeling: Random Forest & XGBoost":
     # Modeling page content
     st.header("💻 Modeling Techniques: Random Forest & XGBoost")
     st.write("""
@@ -296,7 +296,7 @@ elif page == "Modeling: Random Forest & XGBoost":
     """)
 
 
-elif page == "Results: Error Analysis & Model Performance":
+elif page == "📈Results: Error Analysis & Model Performance":
     # Results page content
     st.header("📈 Results: Error Analysis & Model Performance")
     st.write("""
