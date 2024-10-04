@@ -104,7 +104,7 @@ feature_columns = df_encoded.drop('SMV', axis=1).columns.tolist()
 
 # Sidebar for page navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.button("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
+page = st.sidebar.radio("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
                                       "📊Data Preparation: Getting Ready for Modeling", 
                                       "💻Modeling: Random Forest & XGBoost", 
                                       "📈Results: Error Analysis & Model Performance"])
