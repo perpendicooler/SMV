@@ -4,7 +4,7 @@ import joblib
 st.set_page_config(
     page_title="SMV Prediction App",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
-    layout="wide"
+    # layout="wide"
 )
 # Add custom CSS for styling with enhancements and animations
 st.markdown(
