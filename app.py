@@ -155,8 +155,8 @@ if page == "SMV Prediction App":
                           (df['Operation Position'] == Operation_Position) &
                           (df['Operation Description'] == Operation_Description) &
                           (df['Length (cm)'] == Length)]
-        with st.spinner('Processing your prediction...'):
         actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
+        with st.spinner('Processing your prediction...'):
 
         # Model Predictions
         try:
