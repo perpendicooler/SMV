@@ -158,31 +158,31 @@ if page == "SMV Prediction App":
         actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
         with st.spinner('Processing your prediction...'):
 
-        # Model Predictions
+            # Model Predictions
             try:
                 # Random Forest Prediction
                 prediction_rf = model_rf.predict(input_encoded)[0]
-    
+
                 # XGBoost Prediction
                 prediction_xgboost = model_xgboost.predict(input_encoded)[0]
-    
+
                 st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
                 st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-    
+
                 if actual_smv is not None:
                     st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
-    
+
                     # Calculate errors for both models
                     error_rf = abs(prediction_rf - actual_smv)
                     error_xgboost = abs(prediction_xgboost - actual_smv)
-    
+
                     relative_error_rf = (error_rf / actual_smv) * 100
                     relative_error_xgboost = (error_xgboost / actual_smv) * 100
-    
+
                     # Display error metrics for both models
                     st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
                     st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
-    
+
                     # Determine better model
                     if error_rf < error_xgboost:
                         st.success("Random Forest is the better fit for this prediction.")
@@ -190,15 +190,36 @@ if page == "SMV Prediction App":
                         st.success("XGBoost is the better fit for this prediction.")
                 else:
                     st.write("**New combination detected!** No actual SMV available.")
-    
-            except ValueError as e:
-                st.error(f"Error during prediction: {e}")
 
-    # Download the dataset option
-    if st.button('Download Original Data'):
-        df.to_excel('SMV_original_data.xlsx', index=False)
-        with open('SMV_original_data.xlsx', 'rb') as f:
-            st.download_button('Download Original Data', f, file_name='SMV_original_data.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            except ValueError as e:
+                st.error(f"An error occurred: {e}")
+
+            # Save prediction to Excel
+            if st.button("Save Prediction"):
+                predictions_df = pd.DataFrame({
+                    'GG': [GG],
+                    'Operation': [Operation],
+                    'Operation Position': [Operation_Position],
+                    'Operation Description': [Operation_Description],
+                    'Yarn Type': [Yarn_Type],
+                    'Knit Construction': [Knit_Construction],
+                    'MC Speed': [MC_Speed],
+                    'Length (cm)': [Length],
+                    'RF_Predicted_SMV': [prediction_rf],
+                    'XGBoost_Predicted_SMV': [prediction_xgboost]
+                })
+
+                # Load or create the Excel file for saving predictions
+                try:
+                    history_df = pd.read_excel('prediction_history.xlsx')
+                    combined_df = pd.concat([history_df, predictions_df], ignore_index=True)
+                except FileNotFoundError:
+                    combined_df = predictions_df  # Create new DataFrame if file does not exist
+
+                # Save to Excel
+                combined_df.to_excel('prediction_history.xlsx', index=False)
+                st.success("Prediction saved successfully!")
+
 
 elif page == "🚀Overview: The SMV Prediction Project":
     # Overview page content
