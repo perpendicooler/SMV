@@ -190,7 +190,8 @@ if page == "SMV Prediction App":
                         st.success("XGBoost is the better fit for this prediction.")
                 else:
                     st.write("**New combination detected!** No actual SMV available.")
-
+                    r_squared_rf = r2_score(y_test, model_rf.predict(X_test))  # Assuming X_test and y_test are available
+                    r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))                   
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
 
