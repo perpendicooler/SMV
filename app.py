@@ -162,6 +162,8 @@ if page == "SMV Prediction App":
 
             # Model Predictions
             try:
+                r_squared_rf = r2_score(y_test, model_rf.predict(X_test))  # Random Forest R-squared
+                r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))
                 # Random Forest Prediction
                 prediction_rf = model_rf.predict(input_encoded)[0]
 
