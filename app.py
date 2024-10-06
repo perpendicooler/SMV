@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from sklearn.metrics import r2_score
-
 st.set_page_config(
     page_title="SMV Prediction App",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
@@ -162,8 +160,6 @@ if page == "SMV Prediction App":
 
             # Model Predictions
             try:
-                r_squared_rf = r2_score(y_test, model_rf.predict(X_test))  # Random Forest R-squared
-                r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))
                 # Random Forest Prediction
                 prediction_rf = model_rf.predict(input_encoded)[0]
 
@@ -194,8 +190,7 @@ if page == "SMV Prediction App":
                         st.success("XGBoost is the better fit for this prediction.")
                 else:
                     st.write("**New combination detected!** No actual SMV available.")
-                    r_squared_rf = r2_score(y_test, model_rf.predict(X_test))  # Assuming X_test and y_test are available
-                    r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))                   
+
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
 
