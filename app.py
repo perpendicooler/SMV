@@ -342,4 +342,4 @@ elif page == "📈Results: Error Analysis & Model Performance":
 
 # Footer with acknowledgments
 st.markdown("---")
-st.write("Developed by [MD ARIF HOSSAIN](https://github.com/perpendicooler) - All Rights Reserved © 2024")
+st.write("Developed by [INDESORE](https://www.indesore.com/) - All Rights Reserved © 2024")
