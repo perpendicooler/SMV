@@ -190,6 +190,15 @@ if page == "SMV Prediction App":
                         st.success("XGBoost is the better fit for this prediction.")
                 else:
                     st.write("**New combination detected!** No actual SMV available.")
+                    # Example: simple average
+                    combined_prediction = (prediction_rf + prediction_xgboost) / 2
+                    st.write(f"**Combined Predicted SMV (Average):** {combined_prediction:.2f}")
+                    
+                    # Example: weighted average based on R-squared values
+                    total_r2 = r_squared_rf + r_squared_xgboost
+                    weighted_prediction = (r_squared_rf * prediction_rf + r_squared_xgboost * prediction_xgboost) / total_r2
+                    st.write(f"**Weighted Predicted SMV:** {weighted_prediction:.2f}")
+
 
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
