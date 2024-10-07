@@ -168,8 +168,6 @@ if page == "SMV Prediction App":
 
                 st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
                 st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-                r_squared_rf = r2_score(y_test, model_rf.predict(X_test))
-                r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))
                 if actual_smv is not None:
                     st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
 
@@ -193,12 +191,7 @@ if page == "SMV Prediction App":
                     st.write("**New combination detected!** No actual SMV available.")
                     # Example: simple average
                     combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                    st.write(f"**Combined Predicted SMV (Average):** {combined_prediction:.2f}")
-                    
-                    # Example: weighted average based on R-squared values
-                    total_r2 = r_squared_rf + r_squared_xgboost
-                    weighted_prediction = (r_squared_rf * prediction_rf + r_squared_xgboost * prediction_xgboost) / total_r2
-                    st.write(f"**Weighted Predicted SMV:** {weighted_prediction:.2f}")
+                    st.write(f"**This might take around:** {combined_prediction:.2f}")
 
 
             except ValueError as e:
