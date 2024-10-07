@@ -168,7 +168,8 @@ if page == "SMV Prediction App":
 
                 st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
                 st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-
+                r_squared_rf = r2_score(y_test, model_rf.predict(X_test))
+                r_squared_xgboost = r2_score(y_test, model_xgboost.predict(X_test))
                 if actual_smv is not None:
                     st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
 
