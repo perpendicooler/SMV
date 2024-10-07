@@ -191,7 +191,7 @@ if page == "SMV Prediction App":
                     st.write("**New combination detected!** No actual SMV available.")
                     # Example: simple average
                     combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                    st.write(f"**This might take around:** {combined_prediction:.2f}")
+                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
 
             except ValueError as e:
