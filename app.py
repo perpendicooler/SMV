@@ -89,15 +89,16 @@ st.markdown(
 )
 
 # Load the saved models
-model_rf = joblib.load('trained_model_rf.pkl')
-model_xgboost = joblib.load('trained_model_xgboost.pkl')
+model_rf = joblib.load('trained_random_forest_model.pkl')
+model_xgboost = joblib.load('trained_xgboost_model.pkl')
 
 # Load the dataset
-file_path = 'SMV-12&7GG.xlsx'
+file_path = 'SMV.xlsx'
 df = pd.read_excel(file_path)
 
 # One-hot encode the dataset
-df_encoded = pd.get_dummies(df, columns=['Operation', 'Operation Position', 'Yarn Type', 'GG', 'Operation Description', 'Knit Construction'])
+df_encoded = pd.get_dummies(df, columns=['Operation', 'Operation Position', 'Fiber 1', 
+                                          'Fiber 2', 'Fiber 3', 'GG', 'Operation Description', 'Knit Construction'])
 
 # Get the feature names used in training (excluding target column 'SMV')
 feature_columns = df_encoded.drop('SMV', axis=1).columns.tolist()
@@ -122,8 +123,23 @@ if page == "SMV Prediction App":
     Operation = st.selectbox('Select Operation', df['Operation'].unique().tolist())
     Operation_Position = st.selectbox('Select Operation Position', df['Operation Position'].unique().tolist())
     Operation_Description = st.selectbox('Select Operation Description', df['Operation Description'].unique().tolist())
-    Yarn_Type = st.selectbox('Select Yarn Type', df['Yarn Type'].unique().tolist())
-    Knit_Construction = st.selectbox('Select Knit Construction', df['Knit Construction'].unique().tolist())
+    
+    # New input fields based on the updated dataset
+    Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
+    Fiber_1 = st.selectbox('Select Fiber 1', df['Fiber 1'].unique().tolist())
+    Count_1 = st.number_input('Enter Count 1', min_value=0)
+    Ply_1 = st.number_input('Enter Ply 1', min_value=0)
+    
+    Percentage_2 = st.number_input('Enter Percentage 2', min_value=0.0, max_value=100.0, step=0.1)
+    Fiber_2 = st.selectbox('Select Fiber 2', df['Fiber 2'].unique().tolist())
+    Count_2 = st.number_input('Enter Count 2', min_value=0)
+    Ply_2 = st.number_input('Enter Ply 2', min_value=0)
+    
+    Percentage_3 = st.number_input('Enter Percentage 3', min_value=0.0, max_value=100.0, step=0.1)
+    Fiber_3 = st.selectbox('Select Fiber 3', df['Fiber 3'].unique().tolist())
+    Count_3 = st.number_input('Enter Count 3', min_value=0)
+    Ply_3 = st.number_input('Enter Ply 3', min_value=0)
+
     MC_Speed = st.selectbox('Select MC Speed', df['MC Speed'].unique().tolist())
     Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=300.0, step=1.0)
 
@@ -134,14 +150,27 @@ if page == "SMV Prediction App":
             'Operation': [Operation],
             'Operation Position': [Operation_Position],
             'Operation Description': [Operation_Description],
-            'Yarn Type': [Yarn_Type],
-            'Knit Construction': [Knit_Construction],
+            'Percentage 1': [Percentage_1],
+            'Fiber 1': [Fiber_1],
+            'Count 1': [Count_1],
+            'Ply 1': [Ply_1],
+            'Percentage 2': [Percentage_2],
+            'Fiber 2': [Fiber_2],
+            'Count 2': [Count_2],
+            'Ply 2': [Ply_2],
+            'Percentage 3': [Percentage_3],
+            'Fiber 3': [Fiber_3],
+            'Count 3': [Count_3],
+            'Ply 3': [Ply_3],
             'MC Speed': [MC_Speed],
             'Length (cm)': [Length]
         })
 
         # Apply the same one-hot encoding to the input data
-        input_encoded = pd.get_dummies(input_data, columns=['Operation', 'Operation Position', 'Yarn Type', 'GG', 'Knit Construction', 'Operation Description'])
+        input_encoded = pd.get_dummies(input_data, columns=['Operation', 'Operation Position', 
+                                                             'Fiber 1', 'Fiber 2', 'Fiber 3', 
+                                                             'GG', 'Operation Description', 
+                                                             'Knit Construction'])
 
         # Ensure the input has the same columns as the training data
         input_encoded = input_encoded.reindex(columns=feature_columns, fill_value=0)
@@ -151,13 +180,13 @@ if page == "SMV Prediction App":
                           (df['MC Speed'] == MC_Speed) &
                           (df['Operation'] == Operation) &
                           (df['Knit Construction'] == Knit_Construction) &
-                          (df['Yarn Type'] == Yarn_Type) &
                           (df['Operation Position'] == Operation_Position) &
                           (df['Operation Description'] == Operation_Description) &
                           (df['Length (cm)'] == Length)]
-        actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
-        with st.spinner('Processing your prediction...'):
 
+        actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
+
+        with st.spinner('Processing your prediction...'):
             # Model Predictions
             try:
                 # Random Forest Prediction
@@ -168,6 +197,7 @@ if page == "SMV Prediction App":
 
                 st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
                 st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
+                
                 if actual_smv is not None:
                     st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
 
@@ -193,7 +223,6 @@ if page == "SMV Prediction App":
                     combined_prediction = (prediction_rf + prediction_xgboost) / 2
                     st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
-
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
 
@@ -204,8 +233,18 @@ if page == "SMV Prediction App":
                     'Operation': [Operation],
                     'Operation Position': [Operation_Position],
                     'Operation Description': [Operation_Description],
-                    'Yarn Type': [Yarn_Type],
-                    'Knit Construction': [Knit_Construction],
+                    'Percentage 1': [Percentage_1],
+                    'Fiber 1': [Fiber_1],
+                    'Count 1': [Count_1],
+                    'Ply 1': [Ply_1],
+                    'Percentage 2': [Percentage_2],
+                    'Fiber 2': [Fiber_2],
+                    'Count 2': [Count_2],
+                    'Ply 2': [Ply_2],
+                    'Percentage 3': [Percentage_3],
+                    'Fiber 3': [Fiber_3],
+                    'Count 3': [Count_3],
+                    'Ply 3': [Ply_3],
                     'MC Speed': [MC_Speed],
                     'Length (cm)': [Length],
                     'RF_Predicted_SMV': [prediction_rf],
