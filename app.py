@@ -106,6 +106,11 @@ numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
 # Sidebar navigation
 st.sidebar.header("Navigation")
 
+page = st.sidebar.button("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
+                                      "📊Data Preparation: Getting Ready for Modeling", 
+                                      "💻Modeling: Random Forest & XGBoost", 
+                                      "📈Results: Error Analysis & Model Performance"])
+
 # Create buttons for navigation
 if st.sidebar.button("SMV Prediction App"):
     page = "SMV Prediction App"
@@ -119,10 +124,7 @@ elif st.sidebar.button("📈Results: Error Analysis & Model Performance"):
     page = "Results"
 else:
     page = None  # Default to None if no buttons are clicked
-# page = st.sidebar.button("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
-#                                       "📊Data Preparation: Getting Ready for Modeling", 
-#                                       "💻Modeling: Random Forest & XGBoost", 
-#                                       "📈Results: Error Analysis & Model Performance"])
+
 
 # Main App content
 st.image("IND Logo PNG +.png", use_column_width=True, width=700)
