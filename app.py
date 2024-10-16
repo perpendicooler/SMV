@@ -89,8 +89,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load the saved models
-# Load the saved models
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
 model_rf = joblib.load('trained_random_forest_model.pkl')
 
@@ -127,7 +125,7 @@ Percentage_1, Fiber_1, Count_1, Ply_1 = 0.0, 'None', 0, 0
 if num_fibers >= 1:
     Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
     Fiber_1 = st.selectbox('Select Fiber 1', data['Fiber 1'].unique().tolist())
-    Count_1 = st.number_input('Enter Count 1', min_value=0)
+    Count_1 = st.selectbox('Select Count 1', data['Count 1'].unique().tolist())  # Dynamically select from data
     Ply_1 = st.number_input('Enter Ply 1', min_value=0)
 
 # Fiber 2 inputs
@@ -135,7 +133,7 @@ Percentage_2, Fiber_2, Count_2, Ply_2 = 0.0, 'None', 0, 0
 if num_fibers >= 2:
     Percentage_2 = st.number_input('Enter Percentage 2', min_value=0.0, max_value=100.0, step=0.1)
     Fiber_2 = st.selectbox('Select Fiber 2', data['Fiber 2'].unique().tolist())
-    Count_2 = st.number_input('Enter Count 2', min_value=0)
+    Count_2 = st.selectbox('Select Count 2', data['Count 2'].unique().tolist())  # Dynamically select from data
     Ply_2 = st.number_input('Enter Ply 2', min_value=0)
 
 # Fiber 3 inputs
@@ -143,7 +141,7 @@ Percentage_3, Fiber_3, Count_3, Ply_3 = 0.0, 'None', 0, 0
 if num_fibers == 3:
     Percentage_3 = st.number_input('Enter Percentage 3', min_value=0.0, max_value=100.0, step=0.1)
     Fiber_3 = st.selectbox('Select Fiber 3', data['Fiber 3'].unique().tolist())
-    Count_3 = st.number_input('Enter Count 3', min_value=0)
+    Count_3 = st.selectbox('Select Count 3', data['Count 3'].unique().tolist())  # Dynamically select from data
     Ply_3 = st.number_input('Enter Ply 3', min_value=0)
 
 MC_Speed = st.selectbox('Select MC Speed', data['MC Speed'].unique().tolist())
@@ -214,7 +212,6 @@ if st.button('Predict SMV'):
 
         except ValueError as e:
             st.error(f"An error occurred: {e}")
-
 
 
 
