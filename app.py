@@ -88,175 +88,144 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load the saved models
+
+# Load the trained models
 model_rf = joblib.load('trained_random_forest_model.pkl')
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
 
-# Load the dataset
-file_path = 'SMV.xlsx'
-df = pd.read_excel(file_path)
+# Load the original dataset for existing row checks
+df = pd.read_excel('SMV-12&7GG.xlsx')  # Update with your actual dataset path
 
-# One-hot encode the dataset
-df_encoded = pd.get_dummies(df, columns=['Operation', 'Operation Position', 'Fiber 1', 
-                                          'Fiber 2', 'Fiber 3', 'GG', 'Operation Description', 'Knit Construction'])
+# Sidebar inputs
+st.sidebar.title("Input Parameters")
 
-# Get the feature names used in training (excluding target column 'SMV')
-feature_columns = df_encoded.drop('SMV', axis=1).columns.tolist()
+GG = st.sidebar.selectbox('Select GG:', df['GG'].unique())
+Operation = st.sidebar.selectbox('Select Operation:', df['Operation'].unique())
+Operation_Position = st.sidebar.selectbox('Select Operation Position:', df['Operation Position'].unique())
+Operation_Description = st.sidebar.selectbox('Select Operation Description:', df['Operation Description'].unique())
 
-# Sidebar for page navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.selectbox("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
-                                      "📊Data Preparation: Getting Ready for Modeling", 
-                                      "💻Modeling: Random Forest & XGBoost", 
-                                      "📈Results: Error Analysis & Model Performance"])
+# New parameters
+Percentage_1 = st.sidebar.number_input('Percentage 1', min_value=0.0, max_value=100.0, value=0.0)
+Fiber_1 = st.sidebar.selectbox('Select Fiber 1:', df['Fiber 1'].unique())
+Count_1 = st.sidebar.number_input('Count 1', min_value=0)
+Ply_1 = st.sidebar.number_input('Ply 1', min_value=0)
 
-# Display logo and title with changes
-st.image("IND Logo PNG +.png", use_column_width=True, width=700)  # Logo
-st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)  # Title
+Percentage_2 = st.sidebar.number_input('Percentage 2', min_value=0.0, max_value=100.0, value=0.0)
+Fiber_2 = st.sidebar.selectbox('Select Fiber 2:', df['Fiber 2'].unique())
+Count_2 = st.sidebar.number_input('Count 2', min_value=0)
+Ply_2 = st.sidebar.number_input('Ply 2', min_value=0)
 
-if page == "SMV Prediction App":
-    # Main App content for SMV prediction
-    st.header("Predict SMV using RandomForest & XGBoost")
+Percentage_3 = st.sidebar.number_input('Percentage 3', min_value=0.0, max_value=100.0, value=0.0)
+Fiber_3 = st.sidebar.selectbox('Select Fiber 3:', df['Fiber 3'].unique())
+Count_3 = st.sidebar.number_input('Count 3', min_value=0)
+Ply_3 = st.sidebar.number_input('Ply 3', min_value=0)
 
-    # Input fields for the categories (Only once for both models)
-    GG = st.radio('Select GG', df['GG'].unique().tolist())
-    Operation = st.selectbox('Select Operation', df['Operation'].unique().tolist())
-    Operation_Position = st.selectbox('Select Operation Position', df['Operation Position'].unique().tolist())
-    Operation_Description = st.selectbox('Select Operation Description', df['Operation Description'].unique().tolist())
-    
-    # Input field for Knit Construction
-    Knit_Construction = st.selectbox('Select Knit Construction', df['Knit Construction'].unique().tolist())
-    
-    Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_1 = st.selectbox('Select Fiber 1', df['Fiber 1'].unique().tolist())
-    Count_1 = st.number_input('Enter Count 1', min_value=0)
-    Ply_1 = st.number_input('Enter Ply 1', min_value=0)
-    
-    Percentage_2 = st.number_input('Enter Percentage 2', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_2 = st.selectbox('Select Fiber 2', df['Fiber 2'].unique().tolist())
-    Count_2 = st.number_input('Enter Count 2', min_value=0)
-    Ply_2 = st.number_input('Enter Ply 2', min_value=0)
-    
-    Percentage_3 = st.number_input('Enter Percentage 3', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_3 = st.selectbox('Select Fiber 3', df['Fiber 3'].unique().tolist())
-    Count_3 = st.number_input('Enter Count 3', min_value=0)
-    Ply_3 = st.number_input('Enter Ply 3', min_value=0)
+Knit_Construction = st.sidebar.selectbox('Select Knit Construction:', df['Knit Construction'].unique())
+MC_Speed = st.sidebar.selectbox('Select MC Speed:', df['MC Speed'].unique())
+Length = st.sidebar.number_input('Length (cm)', min_value=0)
 
-    MC_Speed = st.selectbox('Select MC Speed', df['MC Speed'].unique().tolist())
-    Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=300.0, step=1.0)
+# Create a DataFrame from the input
+input_data = pd.DataFrame({
+    'GG': [GG],
+    'Operation': [Operation],
+    'Operation Position': [Operation_Position],
+    'Operation Description': [Operation_Description],
+    'Percentage 1': [Percentage_1],
+    'Fiber 1': [Fiber_1],
+    'Count 1': [Count_1],
+    'Ply 1': [Ply_1],
+    'Percentage 2': [Percentage_2],
+    'Fiber 2': [Fiber_2],
+    'Count 2': [Count_2],
+    'Ply 2': [Ply_2],
+    'Percentage 3': [Percentage_3],
+    'Fiber 3': [Fiber_3],
+    'Count 3': [Count_3],
+    'Ply 3': [Ply_3],
+    'Knit Construction': [Knit_Construction],
+    'MC Speed': [MC_Speed],
+    'Length (cm)': [Length]
+})
 
-    if st.button('Predict SMV'):
-        # Create a DataFrame from the input
-        input_data = pd.DataFrame({
-            'GG': [GG],
-            'Operation': [Operation],
-            'Operation Position': [Operation_Position],
-            'Operation Description': [Operation_Description],
-            'Knit Construction': [Knit_Construction],  # Include Knit Construction here
-            'Percentage 1': [Percentage_1],
-            'Fiber 1': [Fiber_1],
-            'Count 1': [Count_1],
-            'Ply 1': [Ply_1],
-            'Percentage 2': [Percentage_2],
-            'Fiber 2': [Fiber_2],
-            'Count 2': [Count_2],
-            'Ply 2': [Ply_2],
-            'Percentage 3': [Percentage_3],
-            'Fiber 3': [Fiber_3],
-            'Count 3': [Count_3],
-            'Ply 3': [Ply_3],
-            'MC Speed': [MC_Speed],
-            'Length (cm)': [Length]
-        })
+# One-hot encode input data
+input_encoded = pd.get_dummies(input_data, columns=['Operation', 'Operation Position', 
+                                                     'Fiber 1', 'Fiber 2', 'Fiber 3', 
+                                                     'GG', 'Operation Description', 
+                                                     'Knit Construction'])
 
-        # Apply the same one-hot encoding to the input data
-        input_encoded = pd.get_dummies(input_data, columns=['Operation', 'Operation Position', 
-                                                             'Fiber 1', 'Fiber 2', 'Fiber 3', 
-                                                             'GG', 'Operation Description', 
-                                                             'Knit Construction'])
+# Get feature columns from the original DataFrame for consistency
+feature_columns = model_rf.feature_names_in_
 
-        # Ensure the input has the same columns as the training data
-        input_encoded = input_encoded.reindex(columns=feature_columns, fill_value=0)
+# Ensure the input has the same columns as the training data
+input_encoded = input_encoded.reindex(columns=feature_columns, fill_value=0)
 
-        # Check if the input values match an existing row in the original DataFrame
-        existing_row = df[(df['GG'] == GG) &
-                          (df['MC Speed'] == MC_Speed) &
-                          (df['Operation'] == Operation) &
-                          (df['Knit Construction'] == Knit_Construction) &  # Include Knit Construction in check
-                          (df['Operation Position'] == Operation_Position) &
-                          (df['Operation Description'] == Operation_Description) &
-                          (df['Length (cm)'] == Length)]
+# Check if the input values match an existing row in the original DataFrame
+existing_row = df[
+    (df['GG'] == GG) &
+    (df['Operation'] == Operation) &
+    (df['Operation Position'] == Operation_Position) &
+    (df['Operation Description'] == Operation_Description) &
+    (df['Percentage 1'] == Percentage_1) &
+    (df['Fiber 1'] == Fiber_1) &
+    (df['Count 1'] == Count_1) &
+    (df['Ply 1'] == Ply_1) &
+    (df['Percentage 2'] == Percentage_2) &
+    (df['Fiber 2'] == Fiber_2) &
+    (df['Count 2'] == Count_2) &
+    (df['Ply 2'] == Ply_2) &
+    (df['Percentage 3'] == Percentage_3) &
+    (df['Fiber 3'] == Fiber_3) &
+    (df['Count 3'] == Count_3) &
+    (df['Ply 3'] == Ply_3) &
+    (df['Knit Construction'] == Knit_Construction) &
+    (df['MC Speed'] == MC_Speed) &
+    (df['Length (cm)'] == Length)
+]
 
-        actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
+# Check if an actual SMV exists for the input
+actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
 
-        with st.spinner('Processing your prediction...'):
-            # Model Predictions
-            try:
-                # Random Forest Prediction
-                prediction_rf = model_rf.predict(input_encoded)[0]
+# Prediction button
+if st.button('Predict SMV'):
+    with st.spinner('Processing your prediction...'):
+        try:
+            # Random Forest Prediction
+            prediction_rf = model_rf.predict(input_encoded)[0]
 
-                # XGBoost Prediction
-                prediction_xgboost = model_xgboost.predict(input_encoded)[0]
+            # XGBoost Prediction
+            prediction_xgboost = model_xgboost.predict(input_encoded)[0]
 
-                st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
-                st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-                
-                if actual_smv is not None:
-                    st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
+            st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
+            st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
 
-                    # Calculate errors for both models
-                    error_rf = abs(prediction_rf - actual_smv)
-                    error_xgboost = abs(prediction_xgboost - actual_smv)
+            if actual_smv is not None:
+                st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
 
-                    relative_error_rf = (error_rf / actual_smv) * 100
-                    relative_error_xgboost = (error_xgboost / actual_smv) * 100
+                # Calculate errors for both models
+                error_rf = abs(prediction_rf - actual_smv)
+                error_xgboost = abs(prediction_xgboost - actual_smv)
 
-                    # Display error metrics for both models
-                    st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+                relative_error_rf = (error_rf / actual_smv) * 100
+                relative_error_xgboost = (error_xgboost / actual_smv) * 100
 
-                    # Determine better model
-                    if error_rf < error_xgboost:
-                        st.success("Random Forest is the better fit for this prediction.")
-                    else:
-                        st.success("XGBoost is the better fit for this prediction.")
+                # Display error metrics for both models
+                st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+
+                # Determine better model
+                if error_rf < error_xgboost:
+                    st.success("Random Forest is the better fit for this prediction.")
                 else:
-                    st.write("**New combination detected!** No actual SMV available.")
-                    # Example: simple average
-                    combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                    st.success("XGBoost is the better fit for this prediction.")
+            else:
+                st.write("**New combination detected!** No actual SMV available.")
+                # Example: simple average
+                combined_prediction = (prediction_rf + prediction_xgboost) / 2
+                st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
-            except ValueError as e:
-                st.error(f"An error occurred: {e}")
+        except ValueError as e:
+            st.error(f"An error occurred: {e}")
 
-            # Save prediction to Excel
-            if st.button("Save Prediction"):
-                predictions_df = pd.DataFrame({
-                    'GG': [GG],
-                    'Operation': [Operation],
-                    'Operation Position': [Operation_Position],
-                    'Operation Description': [Operation_Description],
-                    'Knit Construction': [Knit_Construction],  # Save Knit Construction
-                    'Percentage 1': [Percentage_1],
-                    'Fiber 1': [Fiber_1],
-                    'Count 1': [Count_1],
-                    'Ply 1': [Ply_1],
-                    'Percentage 2': [Percentage_2],
-                    'Fiber 2': [Fiber_2],
-                    'Count 2': [Count_2],
-                    'Ply 2': [Ply_2],
-                    'Percentage 3': [Percentage_3],
-                    'Fiber 3': [Fiber_3],
-                    'Count 3': [Count_3],
-                    'Ply 3': [Ply_3],
-                    'MC Speed': [MC_Speed],
-                    'Length (cm)': [Length],
-                    'RF_Predicted_SMV': [prediction_rf],
-                    'XGBoost_Predicted_SMV': [prediction_xgboost]
-                })
-
-                predictions_df.to_excel('Prediction_History.xlsx', index=False)
-                st.success("Prediction saved successfully!")
 
 
 elif page == "🚀Overview: The SMV Prediction Project":
