@@ -153,7 +153,7 @@ if num_fibers == 3:
     Ply_3 = st.number_input('Enter Ply 3', min_value=0)
 
 MC_Speed = st.selectbox('Select MC Speed', data['MC Speed'].unique().tolist())
-Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=300.0, step=1.0)
+Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=3000.0, step=1.0)
 
 # Prediction button
 if st.button('Predict SMV'):
