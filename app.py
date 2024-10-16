@@ -89,8 +89,9 @@ st.markdown(
 )
 
 # Load the saved models
-model_rf = joblib.load('trained_random_forest_model.pkl')
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
+model_rf = joblib.load('trained_random_forest_model.pkl')
+
 
 # Load the dataset
 file_path = 'SMV.xlsx'
