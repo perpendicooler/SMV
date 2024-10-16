@@ -354,26 +354,3 @@ st.markdown("---")
 st.write("Developed by [INDESORE](https://www.indesore.com/) - All Rights Reserved © 2024")
 
 
-
-
-
-
-if page == "Overview":
-    st.markdown("# Overview of the SMV Prediction Project")
-    st.write("This project aims to predict Standard Minute Values (SMV) using machine learning models.")
-    # Add more details and visuals about the project
-
-elif page == "Data Preparation":
-    st.markdown("# Data Preparation for Modeling")
-    st.write("Here we discuss how the data was cleaned and prepared for training the models.")
-    # Add details about data cleaning and preprocessing steps
-
-elif page == "Modeling":
-    st.markdown("# Modeling Techniques Used")
-    st.write("This section covers the algorithms and techniques used in the modeling phase.")
-    # Discuss Random Forest and XGBoost models, including hyperparameter tuning
-
-elif page == "Results":
-    st.markdown("# Results and Model Performance")
-    st.write("Analyze the results obtained from both models and compare their performance.")
-    # Include performance metrics and visualizations
