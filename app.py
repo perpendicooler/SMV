@@ -179,13 +179,27 @@ if page == "SMV Prediction App":
         input_encoded = input_encoded.reindex(columns=feature_columns, fill_value=0)
 
         # Check if the input values match an existing row in the original DataFrame
-        existing_row = df[(df['GG'] == GG) &
-                          (df['MC Speed'] == MC_Speed) &
-                          (df['Operation'] == Operation) &
-                          (df['Knit Construction'] == Knit_Construction) &  # Include Knit Construction in check
-                          (df['Operation Position'] == Operation_Position) &
-                          (df['Operation Description'] == Operation_Description) &
-                          (df['Length (cm)'] == Length)]
+        existing_row = df[
+            (df['GG'] == GG) &
+            (df['Operation'] == Operation) &
+            (df['Operation Position'] == Operation_Position) &
+            (df['Operation Description'] == Operation_Description) &
+            (df['Percentage 1'] == Percentage_1) &
+            (df['Fiber 1'] == Fiber_1) &
+            (df['Count 1'] == Count_1) &
+            (df['Ply 1'] == Ply_1) &
+            (df['Percentage 2'] == Percentage_2) &
+            (df['Fiber 2'] == Fiber_2) &
+            (df['Count 2'] == Count_2) &
+            (df['Ply 2'] == Ply_2) &
+            (df['Percentage 3'] == Percentage_3) &
+            (df['Fiber 3'] == Fiber_3) &
+            (df['Count 3'] == Count_3) &
+            (df['Ply 3'] == Ply_3) &
+            (df['Knit Construction'] == Knit_Construction) &
+            (df['MC Speed'] == MC_Speed) &
+            (df['Length (cm)'] == Length)
+        ]
 
         actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
 
