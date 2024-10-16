@@ -104,7 +104,7 @@ numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
                       'Ply 1', 'Ply 2', 'Ply 3', 'MC Speed', 'Length (cm)']
 
 # Sidebar navigation
-page = st.sidebar.selectbox("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
+page = st.sidebar.radio("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
                                       "📊Data Preparation: Getting Ready for Modeling", 
                                       "💻Modeling: Random Forest & XGBoost", 
                                       "📈Results: Error Analysis & Model Performance"])
