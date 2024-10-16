@@ -124,7 +124,9 @@ if page == "SMV Prediction App":
     Operation_Position = st.selectbox('Select Operation Position', df['Operation Position'].unique().tolist())
     Operation_Description = st.selectbox('Select Operation Description', df['Operation Description'].unique().tolist())
     
-    # New input fields based on the updated dataset
+    # Input field for Knit Construction
+    Knit_Construction = st.selectbox('Select Knit Construction', df['Knit Construction'].unique().tolist())
+    
     Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
     Fiber_1 = st.selectbox('Select Fiber 1', df['Fiber 1'].unique().tolist())
     Count_1 = st.number_input('Enter Count 1', min_value=0)
@@ -150,6 +152,7 @@ if page == "SMV Prediction App":
             'Operation': [Operation],
             'Operation Position': [Operation_Position],
             'Operation Description': [Operation_Description],
+            'Knit Construction': [Knit_Construction],  # Include Knit Construction here
             'Percentage 1': [Percentage_1],
             'Fiber 1': [Fiber_1],
             'Count 1': [Count_1],
@@ -179,7 +182,7 @@ if page == "SMV Prediction App":
         existing_row = df[(df['GG'] == GG) &
                           (df['MC Speed'] == MC_Speed) &
                           (df['Operation'] == Operation) &
-                          (df['Knit Construction'] == Knit_Construction) &
+                          (df['Knit Construction'] == Knit_Construction) &  # Include Knit Construction in check
                           (df['Operation Position'] == Operation_Position) &
                           (df['Operation Description'] == Operation_Description) &
                           (df['Length (cm)'] == Length)]
@@ -233,6 +236,7 @@ if page == "SMV Prediction App":
                     'Operation': [Operation],
                     'Operation Position': [Operation_Position],
                     'Operation Description': [Operation_Description],
+                    'Knit Construction': [Knit_Construction],  # Save Knit Construction
                     'Percentage 1': [Percentage_1],
                     'Fiber 1': [Fiber_1],
                     'Count 1': [Count_1],
@@ -251,15 +255,7 @@ if page == "SMV Prediction App":
                     'XGBoost_Predicted_SMV': [prediction_xgboost]
                 })
 
-                # Load or create the Excel file for saving predictions
-                try:
-                    history_df = pd.read_excel('prediction_history.xlsx')
-                    combined_df = pd.concat([history_df, predictions_df], ignore_index=True)
-                except FileNotFoundError:
-                    combined_df = predictions_df  # Create new DataFrame if file does not exist
-
-                # Save to Excel
-                combined_df.to_excel('prediction_history.xlsx', index=False)
+                predictions_df.to_excel('Prediction_History.xlsx', index=False)
                 st.success("Prediction saved successfully!")
 
 
