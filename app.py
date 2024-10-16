@@ -95,7 +95,7 @@ st.markdown(
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
 model_rf = joblib.load('trained_random_forest_model.pkl')
 
-# Load the dataset
+# Load the dataset (used for feature reference)
 file_path = 'SMV.xlsx'
 data = pd.read_excel(file_path)
 
@@ -170,9 +170,12 @@ if st.button('Predict SMV'):
     # One-hot encode the input data using the same columns as in the training data
     input_encoded = pd.get_dummies(input_data, columns=categorical_features)
 
-    # Ensure the input has the same columns as the training data
-    # Reindexing using the columns from the training dataset
-    input_encoded = input_encoded.reindex(columns=model_rf.feature_names_in_, fill_value=0)
+    # Get the list of feature names from the original dataset used for training (X_train columns)
+    # This assumes that you have already defined X_train.columns earlier during model training
+    X_train_columns = pd.get_dummies(data[categorical_features + numerical_features]).columns
+
+    # Reindex the input data to match the training features
+    input_encoded = input_encoded.reindex(columns=X_train_columns, fill_value=0)
 
     # Convert input data to NumPy arrays
     input_encoded_np = input_encoded.values.astype(np.float32)
