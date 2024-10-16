@@ -169,7 +169,8 @@ if st.button('Predict SMV'):
 
             st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
             st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-
+            combined_prediction = (prediction_rf + prediction_xgboost) / 2
+            st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")  
             # Find actual SMV if available
             existing_row = data[
                 (data['GG'] == GG) & (data['Operation'] == Operation) & 
@@ -194,6 +195,8 @@ if st.button('Predict SMV'):
                 error_xgboost = abs(prediction_xgboost - actual_smv)
                 st.write(f"**Random Forest Error:** {error_rf:.2f}")
                 st.write(f"**XGBoost Error:** {error_xgboost:.2f}")
+                combined_prediction = (prediction_rf + prediction_xgboost) / 2
+                st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")                
 
             else:
                 st.write("**New combination detected! No actual SMV available.**")
