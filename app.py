@@ -171,7 +171,8 @@ if st.button('Predict SMV'):
     input_encoded = pd.get_dummies(input_data, columns=categorical_features)
 
     # Ensure the input has the same columns as the training data
-    input_encoded = input_encoded.reindex(columns=X.columns, fill_value=0)
+    # Reindexing using the columns from the training dataset
+    input_encoded = input_encoded.reindex(columns=model_rf.feature_names_in_, fill_value=0)
 
     # Convert input data to NumPy arrays
     input_encoded_np = input_encoded.values.astype(np.float32)
@@ -190,8 +191,6 @@ if st.button('Predict SMV'):
 
         except ValueError as e:
             st.error(f"An error occurred: {e}")
-
-# Save prediction to Excel functionality can be added here as needed
 
 
 
