@@ -89,307 +89,110 @@ st.markdown(
 )
 
 # Load the saved models
+
+
+# Load the saved models
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
 model_rf = joblib.load('trained_random_forest_model.pkl')
 
-
 # Load the dataset
 file_path = 'SMV.xlsx'
-df = pd.read_excel(file_path)
+data = pd.read_excel(file_path)
 
-# One-hot encode the dataset
-df_encoded = pd.get_dummies(df, columns=['Operation', 'Operation Position', 'Fiber 1', 
-                                          'Fiber 2', 'Fiber 3', 'GG', 'Operation Description', 'Knit Construction'])
+# Define the categorical and numerical features
+categorical_features = ['GG', 'Operation', 'Operation Position', 'Operation Description',
+                        'Fiber 1', 'Fiber 2', 'Fiber 3', 'Knit Construction',
+                        'Count 1', 'Count 2', 'Count 3']
 
-# Get the feature names used in training (excluding target column 'SMV')
-feature_columns = df_encoded.drop('SMV', axis=1).columns.tolist()
+numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
+                      'Ply 1', 'Ply 2', 'Ply 3', 'MC Speed', 'Length (cm)']
 
 # Sidebar for page navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.selectbox("Go to", ["SMV Prediction App", "🚀Overview: The SMV Prediction Project", 
-                                      "📊Data Preparation: Getting Ready for Modeling", 
-                                      "💻Modeling: Random Forest & XGBoost", 
-                                      "📈Results: Error Analysis & Model Performance"])
 
 # Display logo and title with changes
 st.image("IND Logo PNG +.png", use_column_width=True, width=700)  # Logo
 st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)  # Title
 
-if page == "SMV Prediction App":
-    # Main App content for SMV prediction
-    st.header("Predict SMV using RandomForest & XGBoost")
+# Main App content for SMV prediction
+st.header("Predict SMV using RandomForest & XGBoost")
 
-    # Input fields for the categories (Only once for both models)
-    GG = st.radio('Select GG', df['GG'].unique().tolist())
-    Operation = st.selectbox('Select Operation', df['Operation'].unique().tolist())
-    Operation_Position = st.selectbox('Select Operation Position', df['Operation Position'].unique().tolist())
-    Operation_Description = st.selectbox('Select Operation Description', df['Operation Description'].unique().tolist())
-    
-    # Input field for Knit Construction
-    Knit_Construction = st.selectbox('Select Knit Construction', df['Knit Construction'].unique().tolist())
-    
-    Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_1 = st.selectbox('Select Fiber 1', df['Fiber 1'].unique().tolist())
-    Count_1 = st.number_input('Enter Count 1', min_value=0)
-    Ply_1 = st.number_input('Enter Ply 1', min_value=0)
-    
-    Percentage_2 = st.number_input('Enter Percentage 2', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_2 = st.selectbox('Select Fiber 2', df['Fiber 2'].unique().tolist())
-    Count_2 = st.number_input('Enter Count 2', min_value=0)
-    Ply_2 = st.number_input('Enter Ply 2', min_value=0)
-    
-    Percentage_3 = st.number_input('Enter Percentage 3', min_value=0.0, max_value=100.0, step=0.1)
-    Fiber_3 = st.selectbox('Select Fiber 3', df['Fiber 3'].unique().tolist())
-    Count_3 = st.number_input('Enter Count 3', min_value=0)
-    Ply_3 = st.number_input('Enter Ply 3', min_value=0)
+# Input fields for the categories (Only once for both models)
+GG = st.radio('Select GG', data['GG'].unique().tolist())
+Operation = st.selectbox('Select Operation', data['Operation'].unique().tolist())
+Operation_Position = st.selectbox('Select Operation Position', data['Operation Position'].unique().tolist())
+Operation_Description = st.selectbox('Select Operation Description', data['Operation Description'].unique().tolist())
+Knit_Construction = st.selectbox('Select Knit Construction', data['Knit Construction'].unique().tolist())
 
-    MC_Speed = st.selectbox('Select MC Speed', df['MC Speed'].unique().tolist())
-    Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=300.0, step=1.0)
+# Inputs for Fiber 1, Fiber 2, Fiber 3 and their corresponding counts and ply
+Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
+Fiber_1 = st.selectbox('Select Fiber 1', data['Fiber 1'].unique().tolist())
+Count_1 = st.number_input('Enter Count 1', min_value=0)
+Ply_1 = st.number_input('Enter Ply 1', min_value=0)
 
-    if st.button('Predict SMV'):
-        # Create a DataFrame from the input
-        input_data = pd.DataFrame({
-            'GG': [GG],
-            'Operation': [Operation],
-            'Operation Position': [Operation_Position],
-            'Operation Description': [Operation_Description],
-            'Knit Construction': [Knit_Construction],  # Include Knit Construction here
-            'Percentage 1': [Percentage_1],
-            'Fiber 1': [Fiber_1],
-            'Count 1': [Count_1],
-            'Ply 1': [Ply_1],
-            'Percentage 2': [Percentage_2],
-            'Fiber 2': [Fiber_2],
-            'Count 2': [Count_2],
-            'Ply 2': [Ply_2],
-            'Percentage 3': [Percentage_3],
-            'Fiber 3': [Fiber_3],
-            'Count 3': [Count_3],
-            'Ply 3': [Ply_3],
-            'MC Speed': [MC_Speed],
-            'Length (cm)': [Length]
-        })
+Percentage_2 = st.number_input('Enter Percentage 2', min_value=0.0, max_value=100.0, step=0.1)
+Fiber_2 = st.selectbox('Select Fiber 2', data['Fiber 2'].unique().tolist())
+Count_2 = st.number_input('Enter Count 2', min_value=0)
+Ply_2 = st.number_input('Enter Ply 2', min_value=0)
 
-        # Apply the same one-hot encoding to the input data
-        input_encoded = pd.get_dummies(input_data, columns=['Operation', 'Operation Position', 
-                                                             'Fiber 1', 'Fiber 2', 'Fiber 3', 
-                                                             'GG', 'Operation Description', 
-                                                             'Knit Construction'])
+Percentage_3 = st.number_input('Enter Percentage 3', min_value=0.0, max_value=100.0, step=0.1)
+Fiber_3 = st.selectbox('Select Fiber 3', data['Fiber 3'].unique().tolist())
+Count_3 = st.number_input('Enter Count 3', min_value=0)
+Ply_3 = st.number_input('Enter Ply 3', min_value=0)
 
-        # Ensure the input has the same columns as the training data
-        input_encoded = input_encoded.reindex(columns=feature_columns, fill_value=0)
+MC_Speed = st.selectbox('Select MC Speed', data['MC Speed'].unique().tolist())
+Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=300.0, step=1.0)
 
-        # Check if the input values match an existing row in the original DataFrame
-        existing_row = df[
-            (df['GG'] == GG) &
-            (df['Operation'] == Operation) &
-            (df['Operation Position'] == Operation_Position) &
-            (df['Operation Description'] == Operation_Description) &
-            (df['Percentage 1'] == Percentage_1) &
-            (df['Fiber 1'] == Fiber_1) &
-            (df['Count 1'] == Count_1) &
-            (df['Ply 1'] == Ply_1) &
-            (df['Percentage 2'] == Percentage_2) &
-            (df['Fiber 2'] == Fiber_2) &
-            (df['Count 2'] == Count_2) &
-            (df['Ply 2'] == Ply_2) &
-            (df['Percentage 3'] == Percentage_3) &
-            (df['Fiber 3'] == Fiber_3) &
-            (df['Count 3'] == Count_3) &
-            (df['Ply 3'] == Ply_3) &
-            (df['Knit Construction'] == Knit_Construction) &
-            (df['MC Speed'] == MC_Speed) &
-            (df['Length (cm)'] == Length)
-        ]
+if st.button('Predict SMV'):
+    # Create a DataFrame from the input
+    input_data = pd.DataFrame({
+        'GG': [GG],
+        'Operation': [Operation],
+        'Operation Position': [Operation_Position],
+        'Operation Description': [Operation_Description],
+        'Knit Construction': [Knit_Construction],
+        'Percentage 1': [Percentage_1],
+        'Fiber 1': [Fiber_1],
+        'Count 1': [Count_1],
+        'Ply 1': [Ply_1],
+        'Percentage 2': [Percentage_2],
+        'Fiber 2': [Fiber_2],
+        'Count 2': [Count_2],
+        'Ply 2': [Ply_2],
+        'Percentage 3': [Percentage_3],
+        'Fiber 3': [Fiber_3],
+        'Count 3': [Count_3],
+        'Ply 3': [Ply_3],
+        'MC Speed': [MC_Speed],
+        'Length (cm)': [Length]
+    })
 
-        actual_smv = existing_row['SMV'].values[0] if not existing_row.empty else None
+    # One-hot encode the input data using the same columns as in the training data
+    input_encoded = pd.get_dummies(input_data, columns=categorical_features)
 
-        with st.spinner('Processing your prediction...'):
-            # Model Predictions
-            try:
-                # Random Forest Prediction
-                prediction_rf = model_rf.predict(input_encoded)[0]
+    # Ensure the input has the same columns as the training data
+    input_encoded = input_encoded.reindex(columns=X.columns, fill_value=0)
 
-                # XGBoost Prediction
-                prediction_xgboost = model_xgboost.predict(input_encoded)[0]
+    # Convert input data to NumPy arrays
+    input_encoded_np = input_encoded.values.astype(np.float32)
 
-                st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
-                st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-                
-                if actual_smv is not None:
-                    st.write(f"**Exact match found!** Actual SMV: {actual_smv:.2f}")
+    # Model Predictions
+    with st.spinner('Processing your prediction...'):
+        try:
+            # Random Forest Prediction
+            prediction_rf = model_rf.predict(input_encoded_np)[0]
 
-                    # Calculate errors for both models
-                    error_rf = abs(prediction_rf - actual_smv)
-                    error_xgboost = abs(prediction_xgboost - actual_smv)
+            # XGBoost Prediction
+            prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
 
-                    relative_error_rf = (error_rf / actual_smv) * 100
-                    relative_error_xgboost = (error_xgboost / actual_smv) * 100
+            st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
+            st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
 
-                    # Display error metrics for both models
-                    st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+        except ValueError as e:
+            st.error(f"An error occurred: {e}")
 
-                    # Determine better model
-                    if error_rf < error_xgboost:
-                        st.success("Random Forest is the better fit for this prediction.")
-                    else:
-                        st.success("XGBoost is the better fit for this prediction.")
-                else:
-                    st.write("**New combination detected!** No actual SMV available.")
-                    # Example: simple average
-                    combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
-
-            except ValueError as e:
-                st.error(f"An error occurred: {e}")
-
-            # Save prediction to Excel
-            if st.button("Save Prediction"):
-                predictions_df = pd.DataFrame({
-                    'GG': [GG],
-                    'Operation': [Operation],
-                    'Operation Position': [Operation_Position],
-                    'Operation Description': [Operation_Description],
-                    'Knit Construction': [Knit_Construction],  # Save Knit Construction
-                    'Percentage 1': [Percentage_1],
-                    'Fiber 1': [Fiber_1],
-                    'Count 1': [Count_1],
-                    'Ply 1': [Ply_1],
-                    'Percentage 2': [Percentage_2],
-                    'Fiber 2': [Fiber_2],
-                    'Count 2': [Count_2],
-                    'Ply 2': [Ply_2],
-                    'Percentage 3': [Percentage_3],
-                    'Fiber 3': [Fiber_3],
-                    'Count 3': [Count_3],
-                    'Ply 3': [Ply_3],
-                    'MC Speed': [MC_Speed],
-                    'Length (cm)': [Length],
-                    'RF_Predicted_SMV': [prediction_rf],
-                    'XGBoost_Predicted_SMV': [prediction_xgboost]
-                })
-
-                predictions_df.to_excel('Prediction_History.xlsx', index=False)
-                st.success("Prediction saved successfully!")
+# Save prediction to Excel functionality can be added here as needed
 
 
-elif page == "🚀Overview: The SMV Prediction Project":
-    # Overview page content
-    st.header("🚀 The Journey of Predicting SMV: From Data to Results")
-    st.write("""
-        **What is SMV?**  
-        Standard Minute Value (SMV) is a critical measure in the textile industry that determines the time required to complete a specific operation. By quantifying SMV, industries can better estimate labor costs, optimize operations, and improve overall productivity. It’s essential for production planning, efficiency measurement, and cost control.
-        
-        **Problem Statement:**  
-        Our goal is to predict SMV using various factors such as operation type, yarn type, knit construction, and machine settings. With a focus on optimizing labor productivity and cost estimation, we employ machine learning models like **Random Forest** and **XGBoost** to deliver high-accuracy predictions. These predictions help decision-makers streamline processes, improve time management, and reduce production costs.
-
-        **Approach:**
-
-        - **Data Collection:**  
-        We gathered real-world data from textile operations, capturing a variety of critical factors:
-            - Operation Type (e.g., sewing, knitting, dyeing)
-            - Yarn Type (cotton, polyester, blends, etc.)
-            - Knit Construction (patterns and techniques used)
-            - Machine Parameters (speed, settings, needle types)
-        These variables were selected based on their direct impact on the SMV and operational efficiency.
-
-        - **Data Preprocessing:**  
-        Raw data is rarely perfect. To prepare the data for machine learning models, we followed these essential steps:
-            - **Cleaning:** Removing irrelevant or redundant data, and addressing missing values.
-            - **Handling Outliers:** Identifying extreme values and deciding whether to cap or remove them.
-            - **Encoding Categorical Variables:** Transforming categorical features into numerical values through **one-hot encoding** for compatibility with the machine learning models.
-            - **Feature Scaling:** Normalizing numerical features like length, speed, and material width to prevent bias during training.
-
-        - **Feature Engineering:**  
-        In this step, we enhanced the dataset by creating new, insightful features. Some of the engineered features include:
-            - Interaction terms between machine speed and operation type.
-            - Transformations (e.g., log, polynomial) of skewed data to improve model fit.
-            These new features help the models learn complex relationships between different parameters and improve prediction accuracy.
-
-        - **Model Training and Evaluation:**  
-        We used two advanced machine learning algorithms: **Random Forest** and **XGBoost**. Both models are highly effective at handling structured data and offer robust, accurate predictions.
-            - **Random Forest:** Builds multiple decision trees, averages their predictions, and prevents overfitting by bagging.
-            - **XGBoost:** A highly optimized gradient boosting model that’s efficient, fast, and works well with sparse datasets.
-        
-        After training, the models are evaluated based on how well they predict SMV values compared to the actual data. Metrics like **Mean Absolute Error (MAE)**, **Root Mean Squared Error (RMSE)**, and **R-Squared** are used to measure performance.
-        
-        - **Model Comparison:**  
-        Once trained, we compared both models using evaluation metrics and identified the model that performed best. This model is deployed to provide predictions in real-time in this application.
-    """)
 
 
-elif page == "📊Data Preparation: Getting Ready for Modeling":
-    # Data preparation page content
-    st.header("📊 Data Preparation for SMV Prediction")
-    st.write("""
-        Data preparation is a crucial part of any machine learning project. Here's how we processed our dataset for the best possible results.
-
-        - **Data Collection:**  
-        We worked with a rich dataset consisting of multiple parameters that influence SMV. Some key features include:
-            - Operation Type: Different tasks performed in textile production.
-            - Yarn Type: The materials used in production (e.g., cotton, wool, polyester).
-            - Machine Speed: The speed at which the machine operates during the task.
-            - Knit Construction: The technique or pattern used in knitting.
-            - Material Length: The length of material processed during operations.
-
-        - **Preprocessing Steps:**  
-        This phase focuses on cleaning and organizing the raw data:
-            - **Data Cleaning:** Eliminating irrelevant or redundant data, filling missing values, and correcting inconsistencies.
-            - **Handling Missing Values:** For numerical features, missing values were imputed using statistical methods like the median or mean. For categorical data, the mode was used or the rows were dropped based on the extent of missingness.
-            - **Encoding Categorical Variables:** Categorical variables such as operation type, yarn type, and knit construction were converted into numerical format using **one-hot encoding** to allow machine learning models to interpret them.
-            - **Scaling Numerical Features:** Features such as material length and machine speed were scaled using **Min-Max Scaling** to ensure that no feature dominates the others due to its range.
-
-        - **Feature Engineering:**  
-        To improve the model's predictive power, we engineered additional features:
-            - Created interaction terms to capture relationships between features (e.g., operation type × machine speed).
-            - Applied transformations like logarithmic scaling to deal with skewed distributions.
-            - Generated new features from existing ones to enhance model learning.
-    """)
-
-
-elif page == "💻Modeling: Random Forest & XGBoost":
-    # Modeling page content
-    st.header("💻 Modeling Techniques: Random Forest & XGBoost")
-    st.write("""
-        We used two powerful machine learning models to predict SMV:
-
-        **Random Forest:**
-        - An ensemble method that constructs multiple decision trees and aggregates their predictions.
-        - It’s highly accurate for datasets with non-linear relationships.
-        - Random Forest also reduces the risk of overfitting by averaging the outcomes of multiple trees.
-        - Suitable for datasets with both numerical and categorical variables.
-
-        **XGBoost:**
-        - A high-performance implementation of gradient boosting.
-        - It combines the predictions of weak learners in an iterative fashion, improving the final prediction step by step.
-        - XGBoost is efficient, scalable, and often outperforms other algorithms in structured data scenarios.
-        - Incorporates regularization techniques to control model complexity and improve generalization.
-
-        Both models were trained on the same dataset, allowing us to compare their performance on key metrics like **MAE**, **RMSE**, and **R-Squared**. Each model's strengths were assessed, and the most effective one was chosen for deployment.
-    """)
-
-
-elif page == "📈Results: Error Analysis & Model Performance":
-    # Results page content
-    st.header("📈 Results: Error Analysis & Model Performance")
-    st.write("""
-        After training and testing the models, we performed a detailed evaluation to determine how well each model predicted SMV. The key performance metrics include:
-
-        - **Mean Absolute Error (MAE):**  
-        Measures the average absolute difference between predicted and actual SMV values.
-
-        - **Mean Squared Error (MSE):**  
-        Squares the errors to penalize larger differences between predictions and actual values.
-
-        - **R-Squared:**  
-        A statistical measure that represents the proportion of variance in the dependent variable that can be explained by the independent variables. It helps to evaluate the goodness-of-fit for the model.
-
-        **Conclusion:**  
-        After comparing the performance of both models on these metrics, we selected the one with the best accuracy and least error for deployment. This model is now used for real-time SMV predictions, improving the overall efficiency of the textile manufacturing process.
-    """)
-
-
-# Footer with acknowledgments
-st.markdown("---")
-st.write("Developed by [INDESORE](https://www.indesore.com/) - All Rights Reserved © 2024")
