@@ -112,7 +112,6 @@ page = st.sidebar.button("Go to", ["SMV Prediction App", "🚀Overview: The SMV 
                                       "📈Results: Error Analysis & Model Performance"])
 
 
-    page = None  # Default to None if no buttons are clicked
 
 
 # Main App content
