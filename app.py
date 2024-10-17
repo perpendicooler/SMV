@@ -18,21 +18,22 @@ st.markdown(
     <style>
     /* Set the background color for the entire page to a light grey */
     section.main {
-        background-color: #f0f0f5; /* Updated to a light grey */
+        background-color: #eaeef2; /* Softer light grey for better aesthetics */
         color: #333333;
         padding: 20px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
     .stApp {
-        background-color: #f0f0f5;  /* Updated to a light grey */
+        background-color: #eaeef2;  /* Softer light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
     /* Customize sidebar background and text color */
     .css-1d391kg {
-        background-color: #f0f0f5;  /* Sidebar background color */
-        color: white;  /* Sidebar text color */
+        background-color: #ffffff;  /* Sidebar background color */
+        color: #333333;  /* Sidebar text color */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     }
     
     /* Style for title */
@@ -53,14 +54,15 @@ st.markdown(
         border: none;
         border-radius: 8px;
         font-size: 1.2em;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
         font-family: Arial, sans-serif; /* Set font to Arial */
+        cursor: pointer; /* Add pointer cursor on hover */
     }
     .button:hover {
         background-color: #45a049;
         transform: translateY(-3px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
     }
     
     /* Style for input fields */
@@ -73,6 +75,12 @@ st.markdown(
         max-width: 400px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif; /* Set font to Arial */
+        transition: border-color 0.3s; /* Transition for border color */
+    }
+    .input-field:focus {
+        border-color: #4CAF50; /* Green border on focus */
+        outline: none; /* Remove default outline */
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle green shadow on focus */
     }
     
     /* Style for metrics box */
@@ -80,14 +88,14 @@ st.markdown(
         margin: 20px 0;
         padding: 15px;
         border-radius: 5px;
-        background-color: #BEBEBE;
+        background-color: #ffffff; /* White background for contrast */
         color: #333333;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         transition: background-color 0.3s ease;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     .metrics:hover {
-        background-color: #A9A9A9;
+        background-color: #f9f9f9; /* Light hover effect */
     }
     
     /* Center align the tabs */
@@ -96,10 +104,22 @@ st.markdown(
         justify-content: center; /* Center align the tabs */
         gap: 30px; /* Adjust the spacing between tabs */
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .button {
+            width: 100%; /* Make buttons full-width on smaller screens */
+        }
+
+        .input-field {
+            max-width: 100%; /* Make input fields full-width on smaller screens */
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 # Load the trained models
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
