@@ -248,7 +248,7 @@ with tab1:
                 else:
                     st.write("**New combination detected! No actual SMV available.**")
                     # Display the average of the predictions if no actual SMV found
-                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                    #st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
