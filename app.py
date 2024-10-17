@@ -16,23 +16,23 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Set the background color for the entire page to a light sky blue */
+    /* Set the background color for the entire page to a very light grey */
     section.main {
-        background-color: #E6F7FF; /* Light sky blue */
+        background-color: #F9F9F9; /* Very light grey */
         color: #333333;
         padding: 20px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
     .stApp {
-        background-color: #E6F7FF;  /* Light sky blue */
+        background-color: #F9F9F9;  /* Very light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
     /* Style for title */
     .title {
         font-size: 2em; /* Smaller title size */
-        color: #4CAF50; /* Dark green */
+        color: #2C3E50; /* Darker blue color for professionalism */
         margin: 20px 0;
         font-weight: bold;
         text-align: center;
@@ -94,6 +94,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 
