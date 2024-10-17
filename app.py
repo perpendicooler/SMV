@@ -110,7 +110,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview"
 
 with tab1:
     # Main Prediction App content
-    st.image("IND Logo PNG +.png", use_column_width=True, width=400)
+    st.image("IND Logo PNG +.png", use_column_width=True, width=200)
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
     # Input fields
