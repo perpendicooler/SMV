@@ -20,22 +20,19 @@ st.markdown(
         padding: 20px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
-        <style>
-    div[data-baseweb="tab-list"] {
-        display: flex;
-        justify-content: center; /* Center align the tabs */
-        gap: 30px; /* Adjust the spacing between tabs */
-    }
-    </style>
+    
     .stApp {
         background-color: #f0f0f5;;  /* Updated to a light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
+    
     /* Customize sidebar background and text color */
     .css-1d391kg {
         background-color: #f0f0f5;  /* Sidebar background color */
         color: white;  /* Sidebar text color */
     }
+    
+    /* Style for title */
     .title {
         font-size: 2.5em;
         color: #4CAF50;
@@ -44,6 +41,8 @@ st.markdown(
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
+
+    /* Style for buttons */
     .button {
         background-color: #4CAF50;
         color: white;
@@ -60,6 +59,8 @@ st.markdown(
         transform: translateY(-3px);
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     }
+    
+    /* Style for input fields */
     .input-field {
         margin: 10px 0;
         border: 1px solid #ccc;
@@ -70,6 +71,8 @@ st.markdown(
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
+    
+    /* Style for metrics box */
     .metrics {
         margin: 20px 0;
         padding: 15px;
@@ -82,6 +85,13 @@ st.markdown(
     }
     .metrics:hover {
         background-color: #A9A9A9;
+    }
+    
+    /* Center align the tabs */
+    div[data-baseweb="tab-list"] {
+        display: flex;
+        justify-content: center; /* Center align the tabs */
+        gap: 30px; /* Adjust the spacing between tabs */
     }
     </style>
     """,
