@@ -254,7 +254,7 @@ with tab1:
                 st.error(f"An error occurred: {e}")
 
 with tab2:
-    st.markdown("## Overview of the SMV Prediction Project")
+    #st.markdown("## Overview of the SMV Prediction Project")
     st.header("🚀 The Journey of Predicting SMV: From Data to Results")
     
 st.write("""
@@ -300,7 +300,7 @@ st.write("""
 
 
 with tab3:
-    st.markdown("## Data Preparation: Getting Ready for Modeling")
+   # st.markdown("## Data Preparation: Getting Ready for Modeling")
     st.header("📊 Data Preparation for SMV Prediction")
     st.write("""
         Data preparation is a crucial part of any machine learning project. Here's how we processed our dataset for the best possible results.
@@ -328,7 +328,7 @@ with tab3:
     """)
 
 with tab4:
-    st.markdown("## Modeling: Random Forest & XGBoost")
+   # st.markdown("## Modeling: Random Forest & XGBoost")
     st.header("💻 Modeling Techniques: Random Forest & XGBoost")
     st.write("""
         We used two powerful machine learning models to predict SMV:
@@ -349,7 +349,7 @@ with tab4:
     """)
 
 with tab5:
-    st.markdown("## Results: Error Analysis & Model Performance")
+   # st.markdown("## Results: Error Analysis & Model Performance")
     st.header("📈 Results: Error Analysis & Model Performance")
     st.write("""
         After training and testing the models, we performed a detailed evaluation to determine how well each model predicted SMV. The key performance metrics include:
