@@ -127,8 +127,7 @@ with tab1:
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
-
-    st.header("SMV Prediction App")
+    st.markdown('<h2 class="title">SMV Prediction App</h2>', unsafe_allow_html=True)
 
     # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
@@ -169,93 +168,109 @@ with tab1:
     MC_Speed = st.selectbox('Select MC Speed', data['MC Speed'].unique().tolist())
     Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=3000.0, step=1.0)
 
-    # Prediction button
+    # Check if any required inputs are missing
     if st.button('Predict SMV'):
-        # Prepare the input data
-        input_data = pd.DataFrame({
-            'GG': [GG], 'Operation': [Operation], 'Operation Position': [Operation_Position],
-            'Operation Description': [Operation_Description], 'Knit Construction': [Knit_Construction],
-            'Percentage 1': [Percentage_1], 'Fiber 1': [Fiber_1], 'Count 1': [Count_1], 'Ply 1': [Ply_1],
-            'Percentage 2': [Percentage_2], 'Fiber 2': [Fiber_2], 'Count 2': [Count_2], 'Ply 2': [Ply_2],
-            'Percentage 3': [Percentage_3], 'Fiber 3': [Fiber_3], 'Count 3': [Count_3], 'Ply 3': [Ply_3],
-            'MC Speed': [MC_Speed], 'Length (cm)': [Length]
-        })
+        missing_values = []
+        if not GG:
+            missing_values.append("GG")
+        if not Operation:
+            missing_values.append("Operation")
+        if not Operation_Position:
+            missing_values.append("Operation Position")
+        if not Operation_Description:
+            missing_values.append("Operation Description")
+        if not Knit_Construction:
+            missing_values.append("Knit Construction")
+        if num_fibers >= 1 and (Percentage_1 is None or Fiber_1 is None or Count_1 is None or Ply_1 is None):
+            missing_values.append("Fiber 1 details")
+        if num_fibers >= 2 and (Percentage_2 is None or Fiber_2 is None or Count_2 is None or Ply_2 is None):
+            missing_values.append("Fiber 2 details")
+        if num_fibers == 3 and (Percentage_3 is None or Fiber_3 is None or Count_3 is None or Ply_3 is None):
+            missing_values.append("Fiber 3 details")
+        if MC_Speed is None:
+            missing_values.append("MC Speed")
+        if Length is None:
+            missing_values.append("Length")
 
-        # One-hot encode the input data
-        input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
+        # Display warning if any values are missing
+        if missing_values:
+            st.warning(f"Please fill in the following fields before predicting: {', '.join(missing_values)}")
+        else:
+            # Prepare the input data
+            input_data = pd.DataFrame({
+                'GG': [GG], 'Operation': [Operation], 'Operation Position': [Operation_Position],
+                'Operation Description': [Operation_Description], 'Knit Construction': [Knit_Construction],
+                'Percentage 1': [Percentage_1], 'Fiber 1': [Fiber_1], 'Count 1': [Count_1], 'Ply 1': [Ply_1],
+                'Percentage 2': [Percentage_2], 'Fiber 2': [Fiber_2], 'Count 2': [Count_2], 'Ply 2': [Ply_2],
+                'Percentage 3': [Percentage_3], 'Fiber 3': [Fiber_3], 'Count 3': [Count_3], 'Ply 3': [Ply_3],
+                'MC Speed': [MC_Speed], 'Length (cm)': [Length]
+            })
 
-        # Ensure that all model columns are present
-        model_columns = pd.get_dummies(data.drop(columns=['SMV'])).columns
-        input_encoded = input_encoded.reindex(columns=model_columns, fill_value=0)
+            # One-hot encode the input data
+            input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
 
-        # Convert to numpy array for prediction
-        input_encoded_np = input_encoded.values.astype(np.float32)
+            # Ensure that all model columns are present
+            model_columns = pd.get_dummies(data.drop(columns=['SMV'])).columns
+            input_encoded = input_encoded.reindex(columns=model_columns, fill_value=0)
 
-        # Model predictions
-        with st.spinner('Processing your prediction...'):
-            try:
-                # Random Forest prediction
-                prediction_rf = model_rf.predict(input_encoded_np)[0]
-                # XGBoost prediction
-                prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
+            # Convert to numpy array for prediction
+            input_encoded_np = input_encoded.values.astype(np.float32)
 
-                st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
-                st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
+            # Model predictions
+            with st.spinner('Processing your prediction...'):
+                try:
+                    # Random Forest prediction
+                    prediction_rf = model_rf.predict(input_encoded_np)[0]
+                    # XGBoost prediction
+                    prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
 
-                combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                    st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
+                    st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
 
-                # Search for actual SMV in existing data
-                matching_row = data[
-                    (data['GG'] == GG) &
-                    (data['Operation'] == Operation) &
-                    (data['Operation Position'] == Operation_Position) &
-                    (data['Operation Description'] == Operation_Description) &
-                    (data['Knit Construction'] == Knit_Construction) &
-                    (data['MC Speed'] == MC_Speed) & 
-                    (data['Length (cm)'] == Length) &
-                    (data['Percentage 1'] == Percentage_1) & 
-                    (data['Fiber 1'] == Fiber_1) &
-                    (data['Count 1'] == Count_1) & 
-                    (data['Ply 1'] == Ply_1) &
-                    (data['Percentage 2'] == Percentage_2) & 
-                    (data['Fiber 2'] == Fiber_2) &
-                    (data['Count 2'] == Count_2) & 
-                    (data['Ply 2'] == Ply_2) &
-                    (data['Percentage 3'] == Percentage_3) & 
-                    (data['Fiber 3'] == Fiber_3) &
-                    (data['Count 3'] == Count_3) & 
-                    (data['Ply 3'] == Ply_3)
-                ]
+                    combined_prediction = (prediction_rf + prediction_xgboost) / 2
+                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
-                if not matching_row.empty:
-                    actual_smv = matching_row['SMV'].values[0]
-                    st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
+                    # Search for actual SMV in existing data
+                    matching_row = data[
+                        (data['GG'] == GG) &
+                        (data['Operation'] == Operation) &
+                        (data['Operation Position'] == Operation_Position) &
+                        (data['Operation Description'] == Operation_Description) &
+                        (data['Knit Construction'] == Knit_Construction) &
+                        (data['MC Speed'] == MC_Speed) & 
+                        (data['Length (cm)'] == Length) &
+                        (data['Percentage 1'] == Percentage_1) & 
+                        (data['Fiber 1'] == Fiber_1) &
+                        (data['Count 1'] == Count_1) & 
+                        (data['Ply 1'] == Ply_1) &
+                        (data['Percentage 2'] == Percentage_2) & 
+                        (data['Fiber 2'] == Fiber_2) &
+                        (data['Count 2'] == Count_2) & 
+                        (data['Ply 2'] == Ply_2) &
+                        (data['Percentage 3'] == Percentage_3) & 
+                        (data['Fiber 3'] == Fiber_3) &
+                        (data['Count 3'] == Count_3) & 
+                        (data['Ply 3'] == Ply_3)
+                    ]
 
-                    # Calculate errors
-                    error_rf = abs(prediction_rf - actual_smv)
-                    error_xgboost = abs(prediction_xgboost - actual_smv)
+                    if not matching_row.empty:
+                        actual_smv = matching_row['SMV'].values[0]
+                        st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
 
-                    # Calculate relative errors
-                    relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
-                    relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
+                        # Calculate errors
+                        error_rf = abs(prediction_rf - actual_smv)
+                        error_xgboost = abs(prediction_xgboost - actual_smv)
 
-                    # Display errors
-                    st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+                        # Calculate relative errors
+                        relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
+                        relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
 
-                    # Compare the errors and suggest a model
-                    if error_rf < error_xgboost:
-                        st.success("Random Forest is the better fit for this prediction.")
-                    else:
-                        st.success("XGBoost is the better fit for this prediction.")
-                else:
-                    st.write("**New combination detected! No actual SMV available.**")
-                    # Display the average of the predictions if no actual SMV found
-                    #st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                        # Display errors
+                        st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
 
-            except ValueError as e:
-                st.error(f"An error occurred: {e}")
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")
 
 with tab2:
     #st.markdown("## Overview of the SMV Prediction Project")
