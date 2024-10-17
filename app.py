@@ -259,7 +259,7 @@ with tab1:
     
     # Load prediction history for analysis
     if os.path.isfile(file_path):
-        history = pd.read_excel(log_file)
+        history = pd.read_excel(file_path)
         st.write("**Prediction History:**", history)
 
         # Plotting error distribution
