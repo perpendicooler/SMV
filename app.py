@@ -128,8 +128,7 @@ with tab1:
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
 
-    st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
-
+    st.header("SMV Prediction App")
 
     # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
