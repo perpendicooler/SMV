@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
-import joblib
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
 
 st.set_page_config(
     page_title="SMV Prediction App",
