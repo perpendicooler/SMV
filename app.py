@@ -31,9 +31,9 @@ st.markdown(
 
     /* Style for title */
     .title {
-        font-size: 2em; /* Smaller title size */
+        font-size: 1em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
-        margin: 20px 0;
+        margin: 10px 0;
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
@@ -124,7 +124,7 @@ with tab1:
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
-    st.markdown('<h2 class="title">SMV Prediction App</h2>', unsafe_allow_html=True)
+    st.markdown('<h3 class="title">SMV Prediction App</h3>', unsafe_allow_html=True)
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
     # Input fields for predictions
