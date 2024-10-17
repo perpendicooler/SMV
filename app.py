@@ -33,7 +33,7 @@ st.markdown(
     .title {
         font-size: 1em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
-        margin: 1px 0;
+        margin: 20px 0;
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
