@@ -257,7 +257,7 @@ with tab2:
     #st.markdown("## Overview of the SMV Prediction Project")
     st.header("🚀 The Journey of Predicting SMV: From Data to Results")
     
-st.write("""
+    st.write("""
         **What is SMV?**  
         Standard Minute Value (SMV) is a critical measure in the textile industry that determines the time required to complete a specific operation. By quantifying SMV, industries can better estimate labor costs, optimize operations, and improve overall productivity. It’s essential for production planning, efficiency measurement, and cost control.
         
