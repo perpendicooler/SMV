@@ -20,6 +20,13 @@ st.markdown(
         padding: 20px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
+        <style>
+    div[data-baseweb="tab-list"] {
+        display: flex;
+        justify-content: center; /* Center align the tabs */
+        gap: 30px; /* Adjust the spacing between tabs */
+    }
+    </style>
     .stApp {
         background-color: #f0f0f5;;  /* Updated to a light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
