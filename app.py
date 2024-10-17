@@ -6,7 +6,6 @@ import seaborn as sns
 import os
 import joblib
 
-
 st.set_page_config(
     page_title="SMV Prediction App",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
@@ -26,7 +25,7 @@ st.markdown(
     }
     
     .stApp {
-        background-color: #f0f0f5;;  /* Updated to a light grey */
+        background-color: #f0f0f5;  /* Updated to a light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
@@ -122,10 +121,11 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview"
                                         "📊Data Preparation", "💻Modeling", "📈Results"])
 
 with tab1:
-    # Main Prediction App content
-    st.image("IND Logo PNG +.png", width=500)
-
-
+    # Centered logo
+    st.markdown(
+        f"<div style='text-align: center;'><img src='IND Logo PNG +.png' width='500'></div>",
+        unsafe_allow_html=True
+    )
 
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
