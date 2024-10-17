@@ -125,16 +125,16 @@ with tab1:
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
     st.markdown('<h2 class="title">SMV Prediction App</h2>', unsafe_allow_html=True)
-
+    # Dynamic selection of number of fibers
+    num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
     # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
     Operation = st.selectbox('Select Operation', data['Operation'].unique().tolist())
     Operation_Position = st.selectbox('Select Operation Position', data['Operation Position'].unique().tolist())
     Operation_Description = st.selectbox('Select Operation Description', data['Operation Description'].unique().tolist())
-    Knit_Construction = st.selectbox('Select Knit Construction', data['Knit Construction'].unique().tolist())
+    Knit_Construction = st.selectbox('Type Knit Construction', data['Knit Construction'].unique().tolist())
 
-    # Dynamic selection of number of fibers
-    num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
+
 
     # Initialize variables for all fiber inputs
     Percentage_1, Fiber_1, Count_1, Ply_1 = None, None, None, None
