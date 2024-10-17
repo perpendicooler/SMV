@@ -124,7 +124,7 @@ with tab1:
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
-    st.markdown('<h2 class="title">SMV Prediction</h2>', unsafe_allow_html=True)
+    st.markdown('<h1 class="title">SMV Prediction</h1>', unsafe_allow_html=True)
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
     # Input fields for predictions
