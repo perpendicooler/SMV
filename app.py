@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import numpy as np
+
 st.set_page_config(
     page_title="SMV Prediction App",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
@@ -28,10 +29,6 @@ st.markdown(
         background-color: #f0f0f5;  /* Sidebar background color */
         color: white;  /* Sidebar text color */
     }
-    .css-1d391kg .stSidebar {
-        background-color: #f0f0f5;; /* Sidebar background color */
-        color: white; /* Sidebar text color */
-    }
     .title {
         font-size: 2.5em;
         color: #4CAF50;
@@ -39,12 +36,6 @@ st.markdown(
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
-    }
-    .logo {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
     }
     .button {
         background-color: #4CAF50;
@@ -90,10 +81,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Load the trained models
 model_xgboost = joblib.load('trained_xgboost_model.pkl')
 model_rf = joblib.load('trained_random_forest_model.pkl')
 
-# Load dataset for reference
+# Load the dataset for reference
 file_path = 'SMV.xlsx'
 data = pd.read_excel(file_path)
 
@@ -113,7 +105,7 @@ with tab1:
     st.image("IND Logo PNG +.png", use_column_width=True)
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
-    # Input fields
+    # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
     Operation = st.selectbox('Select Operation', data['Operation'].unique().tolist())
     Operation_Position = st.selectbox('Select Operation Position', data['Operation Position'].unique().tolist())
@@ -127,7 +119,7 @@ with tab1:
     if num_fibers >= 1:
         Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
         Fiber_1 = st.selectbox('Select Fiber 1', data['Fiber 1'].unique().tolist())
-        Count_1 = st.selectbox('Select Count 1', data['Count 1'].unique().tolist())  # Dynamically select from data
+        Count_1 = st.selectbox('Select Count 1', data['Count 1'].unique().tolist())  
         Ply_1 = st.number_input('Enter Ply 1', min_value=0)
 
     # Fiber 2 inputs
@@ -149,25 +141,34 @@ with tab1:
 
     # Prediction button
     if st.button('Predict SMV'):
-        # Same prediction code as before...
-        pass
+        # Here you would insert the prediction logic, for now just placeholder output
+        input_data = np.array([GG, Operation, Operation_Position, Operation_Description, Knit_Construction, 
+                               Percentage_1, Fiber_1, Count_1, Ply_1,
+                               Percentage_2 if num_fibers >= 2 else 0, Fiber_2 if num_fibers >= 2 else None, Count_2 if num_fibers >= 2 else None, Ply_2 if num_fibers >= 2 else 0,
+                               Percentage_3 if num_fibers == 3 else 0, Fiber_3 if num_fibers == 3 else None, Count_3 if num_fibers == 3 else None, Ply_3 if num_fibers == 3 else 0,
+                               MC_Speed, Length]).reshape(1, -1)
+        
+        # Random Forest Prediction
+        smv_rf = model_rf.predict(input_data)[0]
+        
+        # XGBoost Prediction
+        smv_xgboost = model_xgboost.predict(input_data)[0]
+        
+        st.write(f"Predicted SMV (Random Forest): {smv_rf}")
+        st.write(f"Predicted SMV (XGBoost): {smv_xgboost}")
 
 with tab2:
-    # Overview tab content
     st.markdown("## Overview of the SMV Prediction Project")
     st.write("This section gives an overview of the SMV prediction project, including key objectives, challenges, and methodologies used.")
 
 with tab3:
-    # Data preparation tab content
     st.markdown("## Data Preparation: Getting Ready for Modeling")
     st.write("This section explains how the data was prepared for the SMV prediction model, including cleaning, encoding, and feature engineering.")
 
 with tab4:
-    # Modeling tab content
     st.markdown("## Modeling: Random Forest & XGBoost")
     st.write("This section discusses the models used for SMV prediction: Random Forest and XGBoost, with details on model training and evaluation.")
 
 with tab5:
-    # Results tab content
     st.markdown("## Results: Error Analysis & Model Performance")
-    st.write("This section provides insights into model performance, error analysis, and the final prediction results.")
+    st.write("This section provides insights into model performance, error analysis, and the comparison between Random Forest and XGBoost predictions.")
