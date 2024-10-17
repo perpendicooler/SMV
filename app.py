@@ -31,7 +31,7 @@ st.markdown(
 
     /* Style for title */
     .title {
-        font-size: 1em; /* Smaller title size */
+        font-size: 1.5em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
         margin: 1px 0;
         font-weight: bold;
