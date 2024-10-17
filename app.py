@@ -132,6 +132,11 @@ with tab1:
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
 
+    # Initialize variables for all fiber inputs
+    Percentage_1, Fiber_1, Count_1, Ply_1 = None, None, None, None
+    Percentage_2, Fiber_2, Count_2, Ply_2 = 0, None, 0, 0  # Default values
+    Percentage_3, Fiber_3, Count_3, Ply_3 = 0, None, 0, 0  # Default values
+
     # Fiber 1 inputs
     if num_fibers >= 1:
         Percentage_1 = st.number_input('Enter Percentage 1', min_value=0.0, max_value=100.0, step=0.1)
@@ -163,10 +168,8 @@ with tab1:
             'GG': [GG], 'Operation': [Operation], 'Operation Position': [Operation_Position],
             'Operation Description': [Operation_Description], 'Knit Construction': [Knit_Construction],
             'Percentage 1': [Percentage_1], 'Fiber 1': [Fiber_1], 'Count 1': [Count_1], 'Ply 1': [Ply_1],
-            'Percentage 2': [Percentage_2] if num_fibers >= 2 else [0], 'Fiber 2': [Fiber_2] if num_fibers >= 2 else [None],
-            'Count 2': [Count_2] if num_fibers >= 2 else [None], 'Ply 2': [Ply_2] if num_fibers >= 2 else [0],
-            'Percentage 3': [Percentage_3] if num_fibers == 3 else [0], 'Fiber 3': [Fiber_3] if num_fibers == 3 else [None],
-            'Count 3': [Count_3] if num_fibers == 3 else [None], 'Ply 3': [Ply_3] if num_fibers == 3 else [0],
+            'Percentage 2': [Percentage_2], 'Fiber 2': [Fiber_2], 'Count 2': [Count_2], 'Ply 2': [Ply_2],
+            'Percentage 3': [Percentage_3], 'Fiber 3': [Fiber_3], 'Count 3': [Count_3], 'Ply 3': [Ply_3],
             'MC Speed': [MC_Speed], 'Length (cm)': [Length]
         })
 
