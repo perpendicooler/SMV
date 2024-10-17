@@ -20,7 +20,7 @@ st.markdown(
     section.main {
         background-color: #F9F9F9; /* Very light grey */
         color: #333333;
-        padding: 10px;
+        padding: 1px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
