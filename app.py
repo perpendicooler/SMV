@@ -33,7 +33,7 @@ st.markdown(
     .title {
         font-size: 1em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
-        margin: 10px 0;
+        margin: 1px 0;
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
@@ -114,7 +114,7 @@ numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
                       'Ply 1', 'Ply 2', 'Ply 3', 'MC Speed', 'Length (cm)']
 
 # Create tabs for different sections of the app
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview", 
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction", "🚀Overview", 
                                         "📊Data Preparation", "💻Modeling", "📈Results"])
 
 with tab1:
@@ -124,7 +124,7 @@ with tab1:
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
-    st.markdown('<h3 class="title">SMV Prediction App</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="title">SMV Prediction</h3>', unsafe_allow_html=True)
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
     # Input fields for predictions
