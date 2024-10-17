@@ -16,99 +16,85 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Set the background color for the entire page */
+    /* Set the background color for the entire page to a light sky blue */
     section.main {
-        background-color: #f4f7fa; /* Light background color for a clean look */
+        background-color: #E6F7FF; /* Light sky blue */
         color: #333333;
-        padding: 40px;
+        padding: 20px;
         font-family: Arial, sans-serif; /* Set font to Arial */
-        border-radius: 10px; /* Rounded corners for main section */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+    
+    .stApp {
+        background-color: #E6F7FF;  /* Light sky blue */
+        font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
-    /* Center align the title */
+    /* Style for title */
     .title {
-        font-size: 2.5em;
-        color: #4CAF50; /* Main title color */
-        margin-bottom: 30px;
+        font-size: 2em; /* Smaller title size */
+        color: #4CAF50; /* Dark green */
+        margin: 20px 0;
         font-weight: bold;
         text-align: center;
+        font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
     /* Style for buttons */
     .button {
-        background-color: #4CAF50; /* Primary button color */
+        background-color: #4CAF50; /* Dark green */
         color: white;
         padding: 12px 24px;
         border: none;
         border-radius: 8px;
-        font-size: 1.2em;
-        cursor: pointer; /* Pointer cursor */
+        font-size: 1.1em; /* Slightly smaller font size */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
-        display: inline-block; /* Allow spacing around buttons */
-        margin: 10px; /* Margin for spacing */
+        font-family: Arial, sans-serif; /* Set font to Arial */
     }
     .button:hover {
-        background-color: #45a049; /* Darker green on hover */
-        transform: translateY(-2px); /* Lift effect */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        background-color: #45a049; /* Slightly lighter green on hover */
+        transform: translateY(-3px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     }
-
+    
     /* Style for input fields */
     .input-field {
         margin: 10px 0;
         border: 1px solid #ccc;
         border-radius: 5px;
-        padding: 12px; /* Increased padding for comfort */
+        padding: 10px;
         width: 100%;
-        max-width: 450px; /* Max width for better alignment */
+        max-width: 400px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif; /* Set font to Arial */
-        transition: border-color 0.3s; /* Transition for border color */
     }
-    .input-field:focus {
-        border-color: #4CAF50; /* Green border on focus */
-        outline: none; /* Remove default outline */
-        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle green shadow on focus */
-    }
-
+    
     /* Style for metrics box */
     .metrics {
         margin: 20px 0;
-        padding: 20px; /* Increased padding */
+        padding: 15px;
         border-radius: 5px;
-        background-color: #ffffff; /* White background for contrast */
+        background-color: #BEBEBE; /* Grey background */
         color: #333333;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s ease;
-        text-align: center; /* Centered text for metrics */
+        font-family: Arial, sans-serif; /* Set font to Arial */
     }
     .metrics:hover {
-        background-color: #f9f9f9; /* Light hover effect */
+        background-color: #A9A9A9; /* Darker grey on hover */
     }
-
+    
     /* Center align the tabs */
     div[data-baseweb="tab-list"] {
         display: flex;
         justify-content: center; /* Center align the tabs */
-        gap: 30px; /* Adjust spacing between tabs */
-        margin-bottom: 20px; /* Spacing below the tabs */
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .button {
-            width: 100%; /* Full-width buttons on smaller screens */
-        }
-
-        .input-field {
-            max-width: 100%; /* Full-width input fields on smaller screens */
-        }
+        gap: 30px; /* Adjust the spacing between tabs */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # Load the trained models
