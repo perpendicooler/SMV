@@ -121,10 +121,8 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview"
                                         "📊Data Preparation", "💻Modeling", "📈Results"])
 
 with tab1:
-    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the proportions as needed
-
-    with col2:  # Center column
-        st.image("IND Logo PNG +.png", width=500)
+    # Centered logo using st.image
+    st.image("IND Logo PNG +.png", width=500)
 
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
