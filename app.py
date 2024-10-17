@@ -6,6 +6,7 @@ import seaborn as sns
 import os
 import joblib
 
+# Set the page configuration (title, layout, etc.)
 st.set_page_config(
     page_title="SMV Prediction",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
