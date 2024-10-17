@@ -198,8 +198,8 @@ with tab1:
                 st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
                 # Search for actual SMV in existing data
-                matching_row = data[
-                    (data['GG'] == GG) & (data['Operation'] == Operation) &
+                matching_row = data[(
+                    data['GG'] == GG) & (data['Operation'] == Operation) &
                     (data['Operation Position'] == Operation_Position) &
                     (data['Operation Description'] == Operation_Description) &
                     (data['Knit Construction'] == Knit_Construction) &
@@ -210,7 +210,7 @@ with tab1:
                     (data['Count 2'] == Count_2) & (data['Ply 2'] == Ply_2) &
                     (data['Percentage 3'] == Percentage_3) & (data['Fiber 3'] == Fiber_3) &
                     (data['Count 3'] == Count_3) & (data['Ply 3'] == Ply_3)
-                ]
+                )]
 
                 if not matching_row.empty:
                     actual_smv = matching_row['SMV'].values[0]
@@ -219,13 +219,27 @@ with tab1:
                     # Calculate errors
                     error_rf = abs(prediction_rf - actual_smv)
                     error_xgboost = abs(prediction_xgboost - actual_smv)
-                    st.write(f"**Random Forest Error:** {error_rf:.2f}")
-                    st.write(f"**XGBoost Error:** {error_xgboost:.2f}")
-                else:
-                    st.write("**New combination detected! No actual SMV available.**")
 
-            except ValueError as e:
-                st.error(f"An error occurred: {e}")
+                    # Calculate relative errors
+                    relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
+                    relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
+
+                    # Display error metrics for both models
+                    st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+
+                    # Determine better model
+                    if error_rf < error_xgboost:
+                        st.success("Random Forest performed better!")
+                    elif error_rf > error_xgboost:
+                        st.success("XGBoost performed better!")
+                    else:
+                        st.success("Both models performed equally well!")
+                else:
+                    st.warning("No exact match found in the dataset for the provided inputs.")
+
+            except Exception as e:
+                st.error(f"Error occurred during prediction: {e}")
 
 with tab2:
     st.markdown("## Overview of the SMV Prediction Project")
