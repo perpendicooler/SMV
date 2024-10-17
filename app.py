@@ -125,6 +125,7 @@ with col2:  # Center column
     st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 with tab1:
     # Centered logo using st.image
+    st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
 
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
