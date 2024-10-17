@@ -249,6 +249,34 @@ with tab1:
             except ValueError as e:
                 st.error(f"An error occurred: {e}")
 
+    # Model insights and performance visualization
+    st.subheader("Model Performance Insights")
+    st.write("Here we will visualize the prediction errors and compare the models.")
+    
+    # Load prediction history for analysis
+    if os.path.isfile(log_file):
+        history = pd.read_csv(log_file)
+        st.write("**Prediction History:**", history)
+
+        # Plotting error distribution
+        plt.figure(figsize=(10, 6))
+        sns.histplot(history[['RF Error', 'XGBoost Error']], bins=20, kde=True)
+        plt.title("Error Distribution of Predictions")
+        plt.xlabel("Error")
+        plt.ylabel("Frequency")
+        plt.legend(['Random Forest', 'XGBoost'])
+        st.pyplot(plt)
+
+        # Plotting predictions vs actual values
+        plt.figure(figsize=(10, 6))
+        plt.scatter(history['Actual SMV'], history['RF Prediction'], label='RF Prediction', alpha=0.5)
+        plt.scatter(history['Actual SMV'], history['XGBoost Prediction'], label='XGBoost Prediction', alpha=0.5)
+        plt.plot(history['Actual SMV'], history['Actual SMV'], color='red', label='Actual SMV')
+        plt.title("Predictions vs Actual SMV")
+        plt.xlabel("Actual SMV")
+        plt.ylabel("Predicted SMV")
+        plt.legend()
+        st.pyplot(plt)
 with tab2:
     st.markdown("## Overview of the SMV Prediction Project")
     st.write("This section gives an overview of the SMV prediction project, including key objectives, challenges, and methodologies used.")
