@@ -122,7 +122,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview"
 
 with tab1:
     # Centered logo using st.image
-    st.image("IND Logo PNG +.png", width=500)
+    st.image("IND Logo PNG +.png")
 
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
