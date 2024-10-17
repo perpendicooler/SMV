@@ -119,10 +119,13 @@ numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
 # Create tabs for different sections of the app
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview", 
                                         "📊Data Preparation", "💻Modeling", "📈Results"])
+col1, col2, col3 = st.columns([1, 2, 1])  # Create three columns to center the image
 
+with col2:  # Center column
+    st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 with tab1:
     # Centered logo using st.image
-    st.image("IND Logo PNG +.png")
+
 
     st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
