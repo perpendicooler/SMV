@@ -16,63 +16,52 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Set the background color for the entire page to a light grey */
+    /* Set the background color for the entire page */
     section.main {
-        background-color: #eaeef2; /* Softer light grey for better aesthetics */
+        background-color: #f4f7fa; /* Light background color for a clean look */
         color: #333333;
-        padding: 20px;
+        padding: 40px;
         font-family: Arial, sans-serif; /* Set font to Arial */
+        border-radius: 10px; /* Rounded corners for main section */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     }
-    
-    .stApp {
-        background-color: #eaeef2;  /* Softer light grey */
-        font-family: Arial, sans-serif; /* Set font to Arial */
-    }
-    
-    /* Customize sidebar background and text color */
-    .css-1d391kg {
-        background-color: #ffffff;  /* Sidebar background color */
-        color: #333333;  /* Sidebar text color */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    }
-    
-    /* Style for title */
+
+    /* Center align the title */
     .title {
         font-size: 2.5em;
-        color: #4CAF50;
-        margin: 20px 0;
+        color: #4CAF50; /* Main title color */
+        margin-bottom: 30px;
         font-weight: bold;
         text-align: center;
-        font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
     /* Style for buttons */
     .button {
-        background-color: #4CAF50;
+        background-color: #4CAF50; /* Primary button color */
         color: white;
         padding: 12px 24px;
         border: none;
         border-radius: 8px;
         font-size: 1.2em;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer; /* Pointer cursor */
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
-        font-family: Arial, sans-serif; /* Set font to Arial */
-        cursor: pointer; /* Add pointer cursor on hover */
+        display: inline-block; /* Allow spacing around buttons */
+        margin: 10px; /* Margin for spacing */
     }
     .button:hover {
-        background-color: #45a049;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        background-color: #45a049; /* Darker green on hover */
+        transform: translateY(-2px); /* Lift effect */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
     }
-    
+
     /* Style for input fields */
     .input-field {
         margin: 10px 0;
         border: 1px solid #ccc;
         border-radius: 5px;
-        padding: 10px;
+        padding: 12px; /* Increased padding for comfort */
         width: 100%;
-        max-width: 400px;
+        max-width: 450px; /* Max width for better alignment */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif; /* Set font to Arial */
         transition: border-color 0.3s; /* Transition for border color */
@@ -82,37 +71,38 @@ st.markdown(
         outline: none; /* Remove default outline */
         box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Subtle green shadow on focus */
     }
-    
+
     /* Style for metrics box */
     .metrics {
         margin: 20px 0;
-        padding: 15px;
+        padding: 20px; /* Increased padding */
         border-radius: 5px;
         background-color: #ffffff; /* White background for contrast */
         color: #333333;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         transition: background-color 0.3s ease;
-        font-family: Arial, sans-serif; /* Set font to Arial */
+        text-align: center; /* Centered text for metrics */
     }
     .metrics:hover {
         background-color: #f9f9f9; /* Light hover effect */
     }
-    
+
     /* Center align the tabs */
     div[data-baseweb="tab-list"] {
         display: flex;
         justify-content: center; /* Center align the tabs */
-        gap: 30px; /* Adjust the spacing between tabs */
+        gap: 30px; /* Adjust spacing between tabs */
+        margin-bottom: 20px; /* Spacing below the tabs */
     }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .button {
-            width: 100%; /* Make buttons full-width on smaller screens */
+            width: 100%; /* Full-width buttons on smaller screens */
         }
 
         .input-field {
-            max-width: 100%; /* Make input fields full-width on smaller screens */
+            max-width: 100%; /* Full-width input fields on smaller screens */
         }
     }
     </style>
