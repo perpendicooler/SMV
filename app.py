@@ -81,7 +81,7 @@ st.markdown(
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     .metrics:hover {
-        background-color: #A9A9A9; /* Darker grey on hover */
+        background-color: #DC143C; /* Darker grey on hover */
     }
     
     /* Center align the tabs */
