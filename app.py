@@ -258,8 +258,8 @@ with tab1:
     st.write("Here we will visualize the prediction errors and compare the models.")
     
     # Load prediction history for analysis
-    if os.path.isfile(log_file):
-        history = pd.read_csv(log_file)
+    if os.path.isfile(file_path):
+        history = pd.read_excel(log_file)
         st.write("**Prediction History:**", history)
 
         # Plotting error distribution
