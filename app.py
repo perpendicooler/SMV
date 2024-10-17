@@ -214,60 +214,101 @@ with tab1:
             input_encoded_np = input_encoded.values.astype(np.float32)
 
             # Model predictions
-            with st.spinner('Processing your prediction...'):
-                try:
-                    # Random Forest prediction
-                    prediction_rf = model_rf.predict(input_encoded_np)[0]
-                    # XGBoost prediction
-                    prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
+# Model predictions
+with st.spinner('Processing your prediction...'):
+    try:
+        # Random Forest prediction
+        prediction_rf = model_rf.predict(input_encoded_np)[0]
+        # XGBoost prediction
+        prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
 
-                    st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
-                    st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
+        st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
+        st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
 
-                    combined_prediction = (prediction_rf + prediction_xgboost) / 2
-                    st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+        # Average the predictions
+        combined_prediction = (prediction_rf + prediction_xgboost) / 2
+        st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
 
-                    # Search for actual SMV in existing data
-                    matching_row = data[
-                        (data['GG'] == GG) &
-                        (data['Operation'] == Operation) &
-                        (data['Operation Position'] == Operation_Position) &
-                        (data['Operation Description'] == Operation_Description) &
-                        (data['Knit Construction'] == Knit_Construction) &
-                        (data['MC Speed'] == MC_Speed) & 
-                        (data['Length (cm)'] == Length) &
-                        (data['Percentage 1'] == Percentage_1) & 
-                        (data['Fiber 1'] == Fiber_1) &
-                        (data['Count 1'] == Count_1) & 
-                        (data['Ply 1'] == Ply_1) &
-                        (data['Percentage 2'] == Percentage_2) & 
-                        (data['Fiber 2'] == Fiber_2) &
-                        (data['Count 2'] == Count_2) & 
-                        (data['Ply 2'] == Ply_2) &
-                        (data['Percentage 3'] == Percentage_3) & 
-                        (data['Fiber 3'] == Fiber_3) &
-                        (data['Count 3'] == Count_3) & 
-                        (data['Ply 3'] == Ply_3)
-                    ]
+        # Search for actual SMV in the existing data
+        matching_row = data[
+            (data['GG'] == GG) &
+            (data['Operation'] == Operation) &
+            (data['Operation Position'] == Operation_Position) &
+            (data['Operation Description'] == Operation_Description) &
+            (data['Knit Construction'] == Knit_Construction) &
+            (data['MC Speed'] == MC_Speed) &
+            (data['Length (cm)'] == Length) &
+            (data['Percentage 1'] == Percentage_1) &
+            (data['Fiber 1'] == Fiber_1) &
+            (data['Count 1'] == Count_1) &
+            (data['Ply 1'] == Ply_1) &
+            (data['Percentage 2'] == Percentage_2) &
+            (data['Fiber 2'] == Fiber_2) &
+            (data['Count 2'] == Count_2) &
+            (data['Ply 2'] == Ply_2) &
+            (data['Percentage 3'] == Percentage_3) &
+            (data['Fiber 3'] == Fiber_3) &
+            (data['Count 3'] == Count_3) &
+            (data['Ply 3'] == Ply_3)
+        ]
 
-                    if not matching_row.empty:
-                        actual_smv = matching_row['SMV'].values[0]
-                        st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
+        if not matching_row.empty:
+            actual_smv = matching_row['SMV'].values[0]
+            st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
 
-                        # Calculate errors
-                        error_rf = abs(prediction_rf - actual_smv)
-                        error_xgboost = abs(prediction_xgboost - actual_smv)
+            # Calculate errors for both models
+            error_rf = abs(prediction_rf - actual_smv)
+            error_xgboost = abs(prediction_xgboost - actual_smv)
 
-                        # Calculate relative errors
-                        relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
-                        relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
+            # Calculate relative errors
+            relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
+            relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
 
-                        # Display errors
-                        st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
-                        st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
+            # Display errors using styled metrics
+            st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
 
-                except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
+            # Determine which model performed better
+            if error_rf < error_xgboost:
+                st.success("**Random Forest** is the better fit for this prediction.")
+            else:
+                st.success("**XGBoost** is the better fit for this prediction.")
+
+        else:
+            st.write("**New combination detected!** No actual SMV available.")
+            st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+
+        # Save prediction to Excel
+        if st.button("Save Prediction"):
+            predictions_df = pd.DataFrame({
+                'GG': [GG],
+                'Operation': [Operation],
+                'Operation Position': [Operation_Position],
+                'Operation Description': [Operation_Description],
+                'Knit Construction': [Knit_Construction],
+                'Percentage 1': [Percentage_1],
+                'Fiber 1': [Fiber_1],
+                'Count 1': [Count_1],
+                'Ply 1': [Ply_1],
+                'Percentage 2': [Percentage_2],
+                'Fiber 2': [Fiber_2],
+                'Count 2': [Count_2],
+                'Ply 2': [Ply_2],
+                'Percentage 3': [Percentage_3],
+                'Fiber 3': [Fiber_3],
+                'Count 3': [Count_3],
+                'Ply 3': [Ply_3],
+                'MC Speed': [MC_Speed],
+                'Length (cm)': [Length],
+                'RF_Predicted_SMV': [prediction_rf],
+                'XGBoost_Predicted_SMV': [prediction_xgboost]
+            })
+
+            predictions_df.to_excel('Prediction_History.xlsx', index=False)
+            st.success("Prediction saved successfully!")
+
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
 
 with tab2:
     #st.markdown("## Overview of the SMV Prediction Project")
