@@ -7,7 +7,7 @@ import os
 import joblib
 
 st.set_page_config(
-    page_title="SMV Prediction App",
+    page_title="SMV Prediction",
     # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
     # layout="wide"
 )
@@ -20,7 +20,7 @@ st.markdown(
     section.main {
         background-color: #F9F9F9; /* Very light grey */
         color: #333333;
-        padding: 20px;
+        padding: 10px;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
     
@@ -33,7 +33,7 @@ st.markdown(
     .title {
         font-size: 1.5em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
-        margin: 1px 0;
+        #margin: 1px 0;
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
