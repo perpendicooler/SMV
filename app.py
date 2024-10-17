@@ -121,13 +121,8 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction App", "🚀Overview"
                                         "📊Data Preparation", "💻Modeling", "📈Results"])
 
 with tab1:
-    # Centered logo
-    st.markdown(
-        f"<div style='text-align: center;'><img src='IND Logo PNG +.png' width='500'></div>",
-        unsafe_allow_html=True
-    )
+    st.image("IND Logo PNG +.png", width=500)
 
-    st.markdown('<h1 class="title">SMV Prediction App</h1>', unsafe_allow_html=True)
 
     # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
