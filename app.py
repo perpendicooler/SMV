@@ -161,9 +161,10 @@ with tab1:
 
     MC_Speed = st.selectbox('Select MC Speed', data['MC Speed'].unique().tolist())
     Length = st.number_input('Enter Length (cm)', min_value=0.0, max_value=3000.0, step=1.0)
+    left, middle, right = st.columns(3)
 
     # Check if any required inputs are missing
-    if st.button('Predict SMV'):
+    if middle.button('Predict SMV'):
         missing_values = []
         if not GG:
             missing_values.append("GG")
