@@ -6,13 +6,6 @@ import seaborn as sns
 import os
 import joblib
 
-# Set the page configuration (title, layout, etc.)
-st.set_page_config(
-    page_title="SMV Prediction",
-    # page_icon="favicon.ico",  # Ensure this is the correct path to your favicon
-    # layout="wide"
-)
-
 # Add custom CSS for styling with enhancements and animations
 st.markdown(
     """
@@ -39,13 +32,6 @@ st.markdown(
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
-    /* Centering the button */
-    .centered-button {
-        display: flex;
-        justify-content: center;
-        margin: 20px 0; /* Add some margin above and below */
-    }
-
     /* Style for buttons */
     .stButton {
         background-color: #4CAF50; /* Dark green */
@@ -58,6 +44,8 @@ st.markdown(
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
         font-family: Arial, sans-serif; /* Set font to Arial */
         cursor: pointer; /* Change cursor to pointer */
+        display: block; /* Block display to allow centering */
+        margin: 0 auto; /* Center the button */
     }
     
     .stButton:hover {
