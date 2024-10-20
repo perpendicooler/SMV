@@ -49,11 +49,11 @@ st.markdown(
     #     margin: 0 auto; /* Center the button */
     # }
     
-    .stButton:hover {
-        background-color: #45a049; /* Slightly lighter green on hover */
-        transform: translateY(-3px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-    }
+    # .stButton:hover {
+    #     background-color: #45a049; /* Slightly lighter green on hover */
+    #     transform: translateY(-3px);
+    #     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    # }
     
     /* Style for input fields */
     .input-field {
