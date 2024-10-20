@@ -34,14 +34,20 @@ st.markdown(
     .title {
         font-size: 1.5em; /* Smaller title size */
         color: #2C3E50; /* Darker blue color for professionalism */
-        #margin: 1px 0;
         font-weight: bold;
         text-align: center;
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
+    /* Centering the button */
+    .centered-button {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0; /* Add some margin above and below */
+    }
+
     /* Style for buttons */
-    .button {
+    .stButton {
         background-color: #4CAF50; /* Dark green */
         color: white;
         padding: 12px 24px;
@@ -51,8 +57,10 @@ st.markdown(
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
         font-family: Arial, sans-serif; /* Set font to Arial */
+        cursor: pointer; /* Change cursor to pointer */
     }
-    .button:hover {
+    
+    .stButton:hover {
         background-color: #45a049; /* Slightly lighter green on hover */
         transform: translateY(-3px);
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
