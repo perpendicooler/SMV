@@ -273,7 +273,7 @@ with tab1:
             
                     else:
                         st.write("**New combination detected!** No actual SMV available.")
-                        st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                      #  st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
             
                     # Save prediction to Excel
                     if st.button("Save Prediction"):
