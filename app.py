@@ -99,26 +99,36 @@ st.markdown(
 
 
 
-model_rf = joblib.load('trained_model_rf.pkl')
-model_xgboost = joblib.load('trained_model_xgboost.pkl')
+# Load the trained models
+model_xgboost = joblib.load('trained_xgboost_model.pkl')
+model_rf = joblib.load('trained_random_forest_model.pkl')
 
-# Load the dataset (ensure that your data matches this format)
-data = pd.read_excel('SMV-12&7GG.xlsx')  # Replace with your actual dataset
+# Load the dataset for reference
+file_path = 'SMV.xlsx'
+data = pd.read_excel(file_path)
 
-# Centered logo and title
-tab1, tab2 = st.tabs(["Prediction", "About"])
+# Define categorical and numerical features
+categorical_features = ['GG', 'Operation', 'Operation Position', 'Operation Description',
+                        'Fiber 1', 'Fiber 2', 'Fiber 3', 'Knit Construction',
+                        'Count 1', 'Count 2', 'Count 3']
+numerical_features = ['Percentage 1', 'Percentage 2', 'Percentage 3',
+                      'Ply 1', 'Ply 2', 'Ply 3', 'MC Speed', 'Length (cm)']
+
+# Create tabs for different sections of the app
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠SMV Prediction", "🚀Overview", 
+                                        "📊Data Preparation", "💻Modeling", "📈Results"])
 
 with tab1:
     # Centered logo using st.image
     col1, col2, col3 = st.columns([1, 2, 1])  # Create three columns to center the image
+
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
     st.markdown('<h1 style="text-align: center; font-family: Arial;">SMV Prediction</h1>', unsafe_allow_html=True)
-
+    
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
-    
     # Input fields for predictions
     GG = st.radio('Select GG', data['GG'].unique().tolist())
     Operation = st.selectbox('Select Operation', data['Operation'].unique().tolist())
