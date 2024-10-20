@@ -49,7 +49,7 @@ st.markdown(
     /* Style for buttons */
     .stButton {
         background-color: #4CAF50; /* Dark green */
-        color: white;
+        color: black;
         padding: 12px 24px;
         border: none;
         border-radius: 8px;
