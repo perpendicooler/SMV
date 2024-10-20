@@ -208,6 +208,10 @@ with tab1:
             input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
 
             # Ensure that all model columns are present
+            # One-hot encode the input data
+            input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
+
+            # Ensure that all model columns are present
             model_columns = pd.get_dummies(data.drop(columns=['SMV'])).columns
             input_encoded = input_encoded.reindex(columns=model_columns, fill_value=0)
 
