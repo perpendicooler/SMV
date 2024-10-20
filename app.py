@@ -278,7 +278,8 @@ with tab1:
                       #  st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
             
                     # Save prediction to Excel
-                    if middle.button("Save Prediction"):
+                    if st.button("Save Prediction"):
+                        
                         predictions_df = pd.DataFrame({
                             'GG': [GG],
                             'Operation': [Operation],
