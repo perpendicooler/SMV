@@ -277,38 +277,38 @@ with tab1:
                         st.write("**New combination detected!** No actual SMV available.")
                       #  st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
             
-                    # Save prediction to Excel
-                    if middle.button("Save Prediction"):
+                #     # Save prediction to Excel
+                #     if middle.button("Save Prediction"):
                         
-                        predictions_df = pd.DataFrame({
-                            'GG': [GG],
-                            'Operation': [Operation],
-                            'Operation Position': [Operation_Position],
-                            'Operation Description': [Operation_Description],
-                            'Knit Construction': [Knit_Construction],
-                            'Percentage 1': [Percentage_1],
-                            'Fiber 1': [Fiber_1],
-                            'Count 1': [Count_1],
-                            'Ply 1': [Ply_1],
-                            'Percentage 2': [Percentage_2],
-                            'Fiber 2': [Fiber_2],
-                            'Count 2': [Count_2],
-                            'Ply 2': [Ply_2],
-                            'Percentage 3': [Percentage_3],
-                            'Fiber 3': [Fiber_3],
-                            'Count 3': [Count_3],
-                            'Ply 3': [Ply_3],
-                            'MC Speed': [MC_Speed],
-                            'Length (cm)': [Length],
-                            'RF_Predicted_SMV': [prediction_rf],
-                            'XGBoost_Predicted_SMV': [prediction_xgboost]
-                        })
+                #         predictions_df = pd.DataFrame({
+                #             'GG': [GG],
+                #             'Operation': [Operation],
+                #             'Operation Position': [Operation_Position],
+                #             'Operation Description': [Operation_Description],
+                #             'Knit Construction': [Knit_Construction],
+                #             'Percentage 1': [Percentage_1],
+                #             'Fiber 1': [Fiber_1],
+                #             'Count 1': [Count_1],
+                #             'Ply 1': [Ply_1],
+                #             'Percentage 2': [Percentage_2],
+                #             'Fiber 2': [Fiber_2],
+                #             'Count 2': [Count_2],
+                #             'Ply 2': [Ply_2],
+                #             'Percentage 3': [Percentage_3],
+                #             'Fiber 3': [Fiber_3],
+                #             'Count 3': [Count_3],
+                #             'Ply 3': [Ply_3],
+                #             'MC Speed': [MC_Speed],
+                #             'Length (cm)': [Length],
+                #             'RF_Predicted_SMV': [prediction_rf],
+                #             'XGBoost_Predicted_SMV': [prediction_xgboost]
+                #         })
             
-                        predictions_df.to_excel('Prediction_History.xlsx', index=False)
-                        st.success("Prediction saved successfully!")
+                #         predictions_df.to_excel('Prediction_History.xlsx', index=False)
+                #         st.success("Prediction saved successfully!")
             
-                except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
+                # except Exception as e:
+                #     st.error(f"An error occurred: {str(e)}")
 
 
 with tab2:
