@@ -125,7 +125,8 @@ with tab1:
     with col2:  # Center column
         st.image("IND Logo PNG +.png", width=300)  # Set the width to a smaller size
 
-    st.markdown('<h1 class="title">SMV Prediction</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align: center; font-family: Arial;">SMV Prediction</h1>', unsafe_allow_html=True)
+    
     # Dynamic selection of number of fibers
     num_fibers = st.selectbox('Select Number of Fibers', [1, 2, 3])
     # Input fields for predictions
@@ -134,8 +135,6 @@ with tab1:
     Operation_Position = st.selectbox('Select Operation Position', data['Operation Position'].unique().tolist())
     Operation_Description = st.selectbox('Select Operation Description', data['Operation Description'].unique().tolist())
     Knit_Construction = st.selectbox('Type Knit Construction', data['Knit Construction'].unique().tolist())
-
-
 
     # Initialize variables for all fiber inputs
     Percentage_1, Fiber_1, Count_1, Ply_1 = None, None, None, None
@@ -208,17 +207,12 @@ with tab1:
             input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
 
             # Ensure that all model columns are present
-            # One-hot encode the input data
-            input_encoded = pd.get_dummies(input_data, columns=data.select_dtypes(include=['object']).columns)
-
-            # Ensure that all model columns are present
             model_columns = pd.get_dummies(data.drop(columns=['SMV'])).columns
             input_encoded = input_encoded.reindex(columns=model_columns, fill_value=0)
 
             # Convert to numpy array for prediction
             input_encoded_np = input_encoded.values.astype(np.float32)
 
-            # Model predictions
             # Model predictions
             with st.spinner('Processing your prediction...'):
                 try:
@@ -258,62 +252,54 @@ with tab1:
                     ]
             
                     if not matching_row.empty:
-                        actual_smv = matching_row['SMV'].values[0]
-                        st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
-            
-                        # Calculate errors for both models
-                        error_rf = abs(prediction_rf - actual_smv)
-                        error_xgboost = abs(prediction_xgboost - actual_smv)
-            
-                        # Calculate relative errors
-                        relative_error_rf = (error_rf / actual_smv) * 100 if actual_smv != 0 else 0
-                        relative_error_xgboost = (error_xgboost / actual_smv) * 100 if actual_smv != 0 else 0
-            
-                        # Display errors using styled metrics
-                        st.markdown(f"<div class='metrics'><strong>Random Forest:</strong><br>Point Difference: {error_rf:.2f}<br>Relative Error: {relative_error_rf:.2f}%</div>", unsafe_allow_html=True)
-                        st.markdown(f"<div class='metrics'><strong>XGBoost:</strong><br>Point Difference: {error_xgboost:.2f}<br>Relative Error: {relative_error_xgboost:.2f}%</div>", unsafe_allow_html=True)
-            
-                        # Determine which model performed better
-                        if error_rf < error_xgboost:
-                            st.success("**Random Forest** is the better fit for this prediction.")
-                        else:
-                            st.success("**XGBoost** is the better fit for this prediction.")
-            
+                        st.write(f"The **actual SMV** for this set of inputs is **{matching_row.iloc[0]['SMV']}**")
                     else:
-                        st.write("**New combination detected!** No actual SMV available.")
-                        st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
+                        st.write(f"**No exact match** found for these inputs in the dataset.")
             
-                    # Save prediction to Excel
-                    if st.button("Save Prediction"):
-                        predictions_df = pd.DataFrame({
-                            'GG': [GG],
-                            'Operation': [Operation],
-                            'Operation Position': [Operation_Position],
-                            'Operation Description': [Operation_Description],
-                            'Knit Construction': [Knit_Construction],
-                            'Percentage 1': [Percentage_1],
-                            'Fiber 1': [Fiber_1],
-                            'Count 1': [Count_1],
-                            'Ply 1': [Ply_1],
-                            'Percentage 2': [Percentage_2],
-                            'Fiber 2': [Fiber_2],
-                            'Count 2': [Count_2],
-                            'Ply 2': [Ply_2],
-                            'Percentage 3': [Percentage_3],
-                            'Fiber 3': [Fiber_3],
-                            'Count 3': [Count_3],
-                            'Ply 3': [Ply_3],
-                            'MC Speed': [MC_Speed],
-                            'Length (cm)': [Length],
-                            'RF_Predicted_SMV': [prediction_rf],
-                            'XGBoost_Predicted_SMV': [prediction_xgboost]
-                        })
+                    # Automatically save prediction to Excel
+                    prediction_history_file = 'Prediction_History.xlsx'
+                    new_prediction = {
+                        'Date': [pd.Timestamp.now()],
+                        'GG': [GG],
+                        'Operation': [Operation],
+                        'Operation Position': [Operation_Position],
+                        'Operation Description': [Operation_Description],
+                        'Knit Construction': [Knit_Construction],
+                        'Percentage 1': [Percentage_1],
+                        'Fiber 1': [Fiber_1],
+                        'Count 1': [Count_1],
+                        'Ply 1': [Ply_1],
+                        'Percentage 2': [Percentage_2],
+                        'Fiber 2': [Fiber_2],
+                        'Count 2': [Count_2],
+                        'Ply 2': [Ply_2],
+                        'Percentage 3': [Percentage_3],
+                        'Fiber 3': [Fiber_3],
+                        'Count 3': [Count_3],
+                        'Ply 3': [Ply_3],
+                        'MC Speed': [MC_Speed],
+                        'Length (cm)': [Length],
+                        'Predicted SMV (RF)': [prediction_rf],
+                        'Predicted SMV (XGBoost)': [prediction_xgboost],
+                        'Combined Prediction': [combined_prediction],
+                        'Actual SMV': matching_row.iloc[0]['SMV'] if not matching_row.empty else np.nan
+                    }
+                    new_prediction_df = pd.DataFrame(new_prediction)
             
-                        predictions_df.to_excel('Prediction_History.xlsx', index=False)
-                        st.success("Prediction saved successfully!")
+                    # Append to history file
+                    try:
+                        prediction_history = pd.read_excel(prediction_history_file)
+                        updated_history = pd.concat([prediction_history, new_prediction_df], ignore_index=True)
+                    except FileNotFoundError:
+                        updated_history = new_prediction_df
+            
+                    # Save updated history back to Excel
+                    updated_history.to_excel(prediction_history_file, index=False)
+                    st.success('Prediction saved successfully to the history file!')
             
                 except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
+                    st.error(f"An error occurred during prediction: {e}")
+
 
 
 with tab2:
