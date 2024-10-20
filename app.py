@@ -33,21 +33,21 @@ st.markdown(
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
 
-    /* Style for buttons */
-    .stButton {
-        #background-color: #4CAF50; /* Dark green */
-        color: black;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.1em; /* Slightly smaller font size */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
-        font-family: Arial, sans-serif; /* Set font to Arial */
-        cursor: pointer; /* Change cursor to pointer */
-        display: block; /* Block display to allow centering */
-        margin: 0 auto; /* Center the button */
-    }
+    # /* Style for buttons */
+    # .stButton {
+    #     #background-color: #4CAF50; /* Dark green */
+    #     color: black;
+    #     padding: 12px 24px;
+    #     border: none;
+    #     border-radius: 8px;
+    #     font-size: 1.1em; /* Slightly smaller font size */
+    #     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    #     transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease;
+    #     font-family: Arial, sans-serif; /* Set font to Arial */
+    #     cursor: pointer; /* Change cursor to pointer */
+    #     display: block; /* Block display to allow centering */
+    #     margin: 0 auto; /* Center the button */
+    # }
     
     .stButton:hover {
         background-color: #45a049; /* Slightly lighter green on hover */
