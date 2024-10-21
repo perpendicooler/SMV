@@ -229,7 +229,8 @@ with tab1:
             
                     st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
                     st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
-            
+                    st.markdown(f"<div class='metrics'><strong>Random Forest Predicted SMV: {prediction_rf:.2f}</strong>}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='metrics'><strong>XGBoost Predicted SMV: {prediction_xgboost:.2f}</strong></div>", unsafe_allow_html=True)
                     # Average the predictions
                     combined_prediction = (prediction_rf + prediction_xgboost) / 2
                     st.write(f"**On average, the SMV is estimated to be around** {combined_prediction:.2f}")
