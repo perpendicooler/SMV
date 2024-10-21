@@ -23,7 +23,13 @@ st.markdown(
         background-color: #F9F9F9;  /* Very light grey */
         font-family: Arial, sans-serif; /* Set font to Arial */
     }
-
+        .exact-match {
+            color: #32cd32; /* Light green for exact match */
+            font-weight: bold;
+            text-align: center;
+            animation: glow 1s infinite;
+            margin: 1rem 0;
+        }
     /* Style for title */
     .title {
         font-size: 1.5em; /* Smaller title size */
