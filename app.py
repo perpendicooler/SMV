@@ -253,7 +253,9 @@ with tab1:
             
                     if not matching_row.empty:
                         actual_smv = matching_row['SMV'].values[0]
-                        st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
+                        st.markdown(f'<div class="exact-match">Exact Match Found!: {actual_smv:.2f}</div>', unsafe_allow_html=True)
+
+                        # st.write(f"**Exact match found! Actual SMV:** {actual_smv:.2f}")
             
                         # Calculate errors for both models
                         error_rf = abs(prediction_rf - actual_smv)
