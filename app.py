@@ -222,13 +222,13 @@ with tab1:
             # Model predictions
             with st.spinner('Processing your prediction...'):
                 try:
-                    # # Random Forest prediction
-                    # prediction_rf = model_rf.predict(input_encoded_np)[0]
-                    # # XGBoost prediction
-                    # prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
+                    # Random Forest prediction
+                    prediction_rf = model_rf.predict(input_encoded_np)[0]
+                    # XGBoost prediction
+                    prediction_xgboost = model_xgboost.predict(input_encoded_np)[0]
             
-                    st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
-                    st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
+                    # st.write(f"**Random Forest Predicted SMV:** {prediction_rf:.2f}")
+                    # st.write(f"**XGBoost Predicted SMV:** {prediction_xgboost:.2f}")
                     # Display Random Forest predicted SMV with styling
                     st.markdown(
                         f"<div class='metrics'><strong>Random Forest Predicted SMV: {prediction_rf:.2f}</strong></div>",
